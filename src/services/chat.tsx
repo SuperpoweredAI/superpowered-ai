@@ -2,9 +2,21 @@
 const REACT_APP_SERVICE_BASE_URL = "https://api.superpowered.ai/v1";
 
 
-export async function createChatThread(idToken, knowledgeBaseIds, model = "gpt-3.5-turbo", temperature = 0, systemMessage = "") {
+interface Payload {
+    knowledge_base_ids: string[];
+    model: string;
+    temperature: number;
+    system_message: string;
+}
 
-    const payload = {
+export async function createChatThread(
+    idToken: string,
+    knowledgeBaseIds: string[] = [],
+    model = "gpt-3.5-turbo",
+    temperature = 0,
+    systemMessage = ""): Promise<[any, number]> {
+
+    const payload: Payload = {
         knowledge_base_ids: knowledgeBaseIds,
         model: model,
         temperature: temperature,
@@ -21,7 +33,6 @@ export async function createChatThread(idToken, knowledgeBaseIds, model = "gpt-3
             },
             body: JSON.stringify({
                 default_options: payload,
-                supp_id: params.playgroundIdentifier
             })
         }
     )
@@ -33,50 +44,27 @@ export async function createChatThread(idToken, knowledgeBaseIds, model = "gpt-3
 }
 
 
-export async function getChatThreadById(idToken, threadId) {
-
-    const response = await fetch(
-        `${REACT_APP_SERVICE_BASE_URL}/chat/threads/${threadId}`,
-        {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": idToken
-            }
-        }
-    )
-
-    const resData = await response.json();
-    console.log(resData)
-    return [resData, response.status];
-
-}
-
-
 export async function getChatThreadResponse(
-    idToken, threadId, input, knowledge_base_ids, model, temperature, system_message, useRSE, targetSegmentLength
-) {
-
-    let formattedTemperature = temperature;
-    if (typeof(temperature) === "string") {
-        formattedTemperature = parseFloat(temperature);
-    }
-    if (formattedTemperature < 0.00001) {
-        formattedTemperature = 0.00001;
-    }
-    if (temperature > 0.99999) {
-        formattedTemperature = 0.99999;
-    }
+    idToken: string,
+    threadId: string,
+    input: string,
+    knowledge_base_ids: string[] = [],
+    model: string = "gpt-3.5-turbo",
+    temperature: number = 0,
+    system_message: string = "",
+    useRSE: boolean = true,
+    targetSegmentLength: string = "medium"
+): Promise<[any, number]> {
 
     const payload = {
         input: input,
         model: model,
-        temperature: formattedTemperature,
+        temperature: temperature,
         use_rse: useRSE,
         segment_length: targetSegmentLength,
         system_message: system_message,
+        knowledge_base_ids: knowledge_base_ids,
     }
-    payload.knowledge_base_ids = knowledge_base_ids
 
     console.log("payload", payload)
 

@@ -56,12 +56,15 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     const [showThinkingDots, setShowThinkingDots] = useState(false);
 
     async function sendMessage(message: string) {
+        const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
         setShowThinkingDots(true)
         // Add the message to the messages list
         let newMessages = [...(messages || []), { aiOrUser: "user", content: message }];
         setMessages(newMessages);
         sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessages));
-        const [resData, status] = await getChatThreadResponse(authToken, chatThreadId, message);
+        const [resData, status] = await getChatThreadResponse(
+            authToken, chatThreadId, message, knowledgeBaseIds
+        );
         setShowThinkingDots(false)
         if (status === 200) {
             // Add the response to the messages list
