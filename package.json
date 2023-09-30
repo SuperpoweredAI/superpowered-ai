@@ -1,6 +1,6 @@
 {
   "name": "superpowered-ai",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -16,8 +16,9 @@
   },
   "author": "Nick McCormick",
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.11.0"
   },
   "devDependencies": {
@@ -37,7 +38,6 @@
     "@storybook/testing-library": "^0.2.1",
     "@types/react": "^18.2.23",
     "prop-types": "^15.8.1",
-    "react-dom": "^18.2.0",
     "rollup": "^3.29.3",
     "rollup-plugin-dts": "^6.0.2",
     "rollup-plugin-postcss": "^4.0.2",
