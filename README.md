@@ -14,6 +14,12 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
     headerLogo=""
     headerText="Superpowered AI"
     placeholderText="Type a message..."
-    chatConfig={{knowledgeBaseIds: []}}
+    chatConfig={{
+        knowledgeBaseIds: [],
+        systemMessage: "",
+    }}
 />
 ```
+
+## Support
+If you have any questions, bug reports, or product enhancement requests, please email nick@superpowered.ai

@@ -142,7 +142,7 @@
     font-weight: 600;
 }
 
-.thinking-chat-message {
+.superpowered-thinking-chat-message {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -151,7 +151,7 @@
     width: 40px;
 }
 
-.thinking-dots {
+.superpowered-thinking-dots {
     font-family: "Inter";
     font-weight: 500;
     font-size: 34px;

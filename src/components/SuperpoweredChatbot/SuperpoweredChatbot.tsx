@@ -9,7 +9,6 @@ import { getChatThreadResponse, createChatThread } from '../../services/chat';
 import './SuperpoweredChatbot.css';
 
 
-
 interface SuperpoweredChatbot {
     apiKey: string;
     apiSecret: string;
@@ -29,15 +28,9 @@ interface MessageInterace {
 
 const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, placeholderText, initialMessage, chatConfig }) => {
 
-    //let maxMessageContainerHeight = "425px";
     let maxContainerHeight = "90vh"
     if (style.chatContainerStyle.maxHeight !== undefined) {
         maxContainerHeight = style.chatContainerStyle.maxHeight;
-        // The maxHeight comes in as 500px
-        // Subtract 170px from the max height to account for the header and input
-        //let maxMessageContainerHeightInt = parseInt(style.chatContainerStyle.maxHeight.slice(0, -2)) - 170;
-        //maxMessageContainerHeightInt = Math.max(maxMessageContainerHeightInt, 180)
-        //maxMessageContainerHeight = `${maxMessageContainerHeightInt}px`;
     }
 
     const messageRef = useRef<HTMLDivElement>(null);
@@ -277,7 +270,7 @@ interface ThinkingChatMessageProps {
     isVisible: boolean;
 }
 
-const ThinkingChatMessage: React.FC<ThinkingChatMessageProps> = ({ isVisible }) => {
+export const ThinkingChatMessage: React.FC<ThinkingChatMessageProps> = ({ isVisible }) => {
     const [message, setMessage] = useState<string>('')
 
     useEffect(() => {
@@ -297,8 +290,8 @@ const ThinkingChatMessage: React.FC<ThinkingChatMessageProps> = ({ isVisible }) 
         )
     } else {
         return (
-            <div className="thinking-chat-message">
-                <p className="thinking-dots">{message}</p>
+            <div className="superpowered-thinking-chat-message">
+                <p className="superpowered-thinking-dots">{message}</p>
             </div>
         )
     }

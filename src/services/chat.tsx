@@ -45,7 +45,7 @@ export async function createChatThread(
 
 
 export async function getChatThreadResponse(
-    idToken: string,
+    authToken: string,
     threadId: string,
     input: string,
     knowledge_base_ids: string[] = [],
@@ -74,7 +74,7 @@ export async function getChatThreadResponse(
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": idToken
+                "Authorization": authToken
             },
             body: JSON.stringify(payload)
         }
