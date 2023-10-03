@@ -55,7 +55,8 @@ export const Small = {
         style: {
             chatContainerStyle: {
                 width: "350px",
-                maxHeight: "300px"
+                maxHeight: "300px",
+                minHeight: "300px"
             },
             headerContainerStyle: {
                 backgroundColor: "white",
@@ -90,7 +91,7 @@ export const FullProps = {
         style: {
             chatContainerStyle: {
                 width: "500px",
-                maxHeight: "500px"
+                maxHeight: "90vh"
             },
             chatBubbleStyle: {
                 backgroundColor: "#fafafa"

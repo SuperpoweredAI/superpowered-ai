@@ -1,4 +1,9 @@
-export const messages = [
+interface MessageObject {
+    aiOrUser: "ai" | "user";
+    content: string;
+}
+
+export const messages: MessageObject[] = [
     { aiOrUser: "user", content: "What is the capital of France" },
     { aiOrUser: "ai", content: "The capital of France is Paris" },
     { aiOrUser: "user", content: "What is the population of Paris" },

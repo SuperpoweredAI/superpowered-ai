@@ -29,13 +29,15 @@ interface MessageInterace {
 
 const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, placeholderText, initialMessage, chatConfig }) => {
 
-    let maxMessageContainerHeight = "425px";
+    //let maxMessageContainerHeight = "425px";
+    let maxContainerHeight = "90vh"
     if (style.chatContainerStyle.maxHeight !== undefined) {
+        maxContainerHeight = style.chatContainerStyle.maxHeight;
         // The maxHeight comes in as 500px
         // Subtract 170px from the max height to account for the header and input
-        let maxMessageContainerHeightInt = parseInt(style.chatContainerStyle.maxHeight.slice(0, -2)) - 170;
-        maxMessageContainerHeightInt = Math.max(maxMessageContainerHeightInt, 180)
-        maxMessageContainerHeight = `${maxMessageContainerHeightInt}px`;
+        //let maxMessageContainerHeightInt = parseInt(style.chatContainerStyle.maxHeight.slice(0, -2)) - 170;
+        //maxMessageContainerHeightInt = Math.max(maxMessageContainerHeightInt, 180)
+        //maxMessageContainerHeight = `${maxMessageContainerHeightInt}px`;
     }
 
     const messageRef = useRef<HTMLDivElement>(null);
@@ -56,14 +58,21 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     const [showThinkingDots, setShowThinkingDots] = useState(false);
 
     async function sendMessage(message: string) {
+
         const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
+        const model = chatConfig.model == undefined ? "gpt-3.5-turbo" : chatConfig.model;
+        const temperature = chatConfig.temperature == undefined ? 0 : chatConfig.temperature;
+        const systemMessage = chatConfig.systemMessage == undefined ? "" : chatConfig.systemMessage;
+        const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
+        const targetSegmentLength = chatConfig.targetSegmentLength == undefined ? "medium" : chatConfig.targetSegmentLength;
+
         setShowThinkingDots(true)
         // Add the message to the messages list
         let newMessages = [...(messages || []), { aiOrUser: "user", content: message }];
         setMessages(newMessages);
         sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessages));
         const [resData, status] = await getChatThreadResponse(
-            authToken, chatThreadId, message, knowledgeBaseIds
+            authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, systemMessage, useRSE, targetSegmentLength
         );
         setShowThinkingDots(false)
         if (status === 200) {
@@ -158,7 +167,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                             </IconContext.Provider>
                         </div>
                     </div>
-                    <div className="superpowered-chatbot-messages-container" style={{ maxHeight: maxMessageContainerHeight }}>
+                    <div className="superpowered-chatbot-messages-container" style={{ maxHeight: `calc(${maxContainerHeight} - 170px)` }}>
                         <ChatMessage
                             aiOrUser={"ai"}
                             message={initialMessage}
