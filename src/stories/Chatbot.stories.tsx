@@ -1,5 +1,6 @@
 import SuperpoweredChatbot from '../components/SuperpoweredChatbot/SuperpoweredChatbot';
 import { messages } from './data/chatMessages';
+import superpoweredLogo from './assets/superpowered-logo-blue.png';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -86,6 +87,7 @@ export const NoMessages = {
 export const FullProps = {
     args: {
         headerText: 'Superpowered',
+        headerLogo: superpoweredLogo,
         initialMessage: "Hello, how can I help you today?",
         placeholderText: "Type a message",
         style: {

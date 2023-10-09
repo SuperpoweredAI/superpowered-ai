@@ -27,8 +27,8 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | ---- | ---- | ------- | ----------- |
 | apiKey | string | "" | Superpowered AI API key |
 | apiSecret | string | "" | Superpowered AI API secret |
-| headerLogo | "" | 
-|
+| headerLogo | React.node | null | The logo (if any) you want displayed next to the title |
+| headerTitle | string | "" | The title you want displayed at the top of the chatbot |
 
 
 ## Support

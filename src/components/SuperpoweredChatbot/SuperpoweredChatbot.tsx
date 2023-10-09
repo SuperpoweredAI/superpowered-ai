@@ -144,7 +144,10 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 <div>
                     <div className="superpowered-chatbot-header-container" style={style.headerContainerStyle}>
                         <div style={{ display: "flex", flexDirection: "row" }}>
-                            <img className="superpowered-chatbot-header-logo" src={headerLogo} />
+                            {(headerLogo !== undefined && headerLogo !== null) && <img
+                                className="superpowered-chatbot-header-logo"
+                                src={headerLogo}
+                                style={style.headerLogoStyle}/>}
                             <p className="superpowered-chatbot-header-text" style={style.headerTextStyle}>
                                 {headerText}
                             </p>
@@ -217,7 +220,7 @@ SuperpoweredChatbot.defaultProps = {
     headerText: "",
     initialMessage: "Hello, how can I help you",
     placeholderText: "Type a message...",
-    headerLogo: "",
+    headerLogo: null,
     chatConfig: {
         knowledgeBaseIds: [],
         model: ["gpt-3.5-turbo"],
