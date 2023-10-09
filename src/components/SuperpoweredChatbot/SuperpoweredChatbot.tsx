@@ -144,7 +144,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 <div>
                     <div className="superpowered-chatbot-header-container" style={style.headerContainerStyle}>
                         <div style={{ display: "flex", flexDirection: "row" }}>
-                            <img src={headerLogo} />
+                            <img className="superpowered-chatbot-header-logo" src={headerLogo} />
                             <p className="superpowered-chatbot-header-text" style={style.headerTextStyle}>
                                 {headerText}
                             </p>

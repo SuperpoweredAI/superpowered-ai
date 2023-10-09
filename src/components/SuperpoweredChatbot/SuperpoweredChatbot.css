@@ -59,6 +59,11 @@
     color: #383838;
 }
 
+.superpowered-chatbot-header-logo {
+    width: 25px;
+    height: 25px;
+}
+
 .superpowered-chatbot-messages-container {
     display: flex;
     background-color: white;
