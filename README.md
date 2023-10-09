@@ -33,12 +33,12 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | headerLogo | No | React.node | null | The logo (if any) you want displayed next to the title |
 | headerTitle | No | string | "" | The title you want displayed at the top of the chatbot |
 | style | No | object | - | Style customization for the chatbot |
-| style.chatContainerMaxHeight | No | string | Max height for the chatbot in the opened state |
-| style.chatContainerWidth | No | string | Width for the chatbot in the opened state |
-| style.chatBubbleStyle | No | React.CSSProperties | Custom style for the floating chat bubble (closed state) |
-| style.chatBubbleIconStyle | No | React.CSSProperties | Custom style for the icon in the floating chat bubble (closed state) |
-| style.userMessageContainerStyle | No | React.CSSProperties | Custom style for the user message container |
-| style.userMessageTextStyle | No | React.CSSProperties | Custom style for the user message text |
+| style.chatContainerMaxHeight | No | string | "90vh" | Max height for the chatbot in the opened state |
+| style.chatContainerWidth | No | string | "500px" | Width for the chatbot in the opened state |
+| style.chatBubbleStyle | No | React.CSSProperties | - | Custom style for the floating chat bubble (closed state) |
+| style.chatBubbleIconStyle | No | React.CSSProperties | - | Custom style for the icon in the floating chat bubble (closed state) |
+| style.userMessageContainerStyle | No | React.CSSProperties | - | Custom style for the user message container |
+| style.userMessageTextStyle | No | React.CSSProperties | - | Custom style for the user message text |
 | chatConfig | Yes | object | - | Configuration parameters for your chatbot. Learn more about chat configuration [here](https://superpoweredai.notion.site) |
 | chatConfig.knowledgeBaseIds | Yes | array | [] | List of Superpowered AI knowledge base ids to give the chatbot access to |
 | chatConfig.systemMessage | No | string | [] | The system message lets you instruct the LLM to behave in a certain way. |
