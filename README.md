@@ -21,5 +21,15 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 />
 ```
 
+## Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| apiKey | string | "" | Superpowered AI API key |
+| apiSecret | string | "" | Superpowered AI API secret |
+| headerLogo | "" | 
+|
+
+
 ## Support
 If you have any questions, bug reports, or product enhancement requests, please email nick@superpowered.ai

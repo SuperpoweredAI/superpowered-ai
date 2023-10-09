@@ -12,7 +12,6 @@ import './SuperpoweredChatbot.css';
 interface SuperpoweredChatbot {
     apiKey: string;
     apiSecret: string;
-    aiOrUser: string;
     style: any;
     headerLogo: any,
     headerText: string,
