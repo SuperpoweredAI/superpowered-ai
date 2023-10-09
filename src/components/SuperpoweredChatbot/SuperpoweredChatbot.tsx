@@ -12,12 +12,35 @@ import './SuperpoweredChatbot.css';
 interface SuperpoweredChatbot {
     apiKey: string;
     apiSecret: string;
-    style: any;
+    style: Style;
     headerLogo: any,
     headerText: string,
     placeholderText: string,
     initialMessage: string,
-    chatConfig: any,
+    chatConfig: ChatConfig,
+}
+
+interface ChatConfig {
+    knowledgeBaseIds: string[];
+    systemMessage: string;
+    //model: string;
+    useRSE: boolean;
+    temperature: number;
+    targetSegmentLength: string;
+}
+
+interface Style {
+    chatContainerMaxHeight: string;
+    chatContainerWidth: string;
+    chatBubbleStyle: React.CSSProperties;
+    chatBubbleIconStyle: React.CSSProperties;
+    userMessageContainerStyle: React.CSSProperties;
+    userMessageTextStyle: React.CSSProperties;
+    //aiMessageContainerStyle: React.CSSProperties;
+    //aiMessageTextStyle: React.CSSProperties;
+    //headerContainerStyle: React.CSSProperties;
+    //headerLogoStyle: React.CSSProperties;
+    headerTextStyle: React.CSSProperties;
 }
 
 interface MessageInterace {
@@ -28,8 +51,8 @@ interface MessageInterace {
 const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, placeholderText, initialMessage, chatConfig }) => {
 
     let maxContainerHeight = "90vh"
-    if (style.chatContainerStyle.maxHeight !== undefined) {
-        maxContainerHeight = style.chatContainerStyle.maxHeight;
+    if (style.chatContainerMaxHeight !== undefined) {
+        maxContainerHeight = style.chatContainerMaxHeight;
     }
 
     const messageRef = useRef<HTMLDivElement>(null);
@@ -52,7 +75,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     async function sendMessage(message: string) {
 
         const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
-        const model = chatConfig.model == undefined ? "gpt-3.5-turbo" : chatConfig.model;
+        const model = "gpt-3.5-turbo"//chatConfig.model == undefined ? "gpt-3.5-turbo" : chatConfig.model;
         const temperature = chatConfig.temperature == undefined ? 0 : chatConfig.temperature;
         const systemMessage = chatConfig.systemMessage == undefined ? "" : chatConfig.systemMessage;
         const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
@@ -140,14 +163,14 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     } else {
 
         return (
-            <div className="superpowered-chatbot-container" style={style.chatContainerStyle}>
+            <div className="superpowered-chatbot-container" style={{width: style.chatContainerWidth}}>
                 <div>
-                    <div className="superpowered-chatbot-header-container" style={style.headerContainerStyle}>
+                    <div className="superpowered-chatbot-header-container">
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             {(headerLogo !== undefined && headerLogo !== null) && <img
                                 className="superpowered-chatbot-header-logo"
-                                src={headerLogo}
-                                style={style.headerLogoStyle}/>}
+                                src={headerLogo}/>
+                            }
                             <p className="superpowered-chatbot-header-text" style={style.headerTextStyle}>
                                 {headerText}
                             </p>
@@ -169,8 +192,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                             customStyle={{
                                 userMessageContainerStyle: style.userMessageContainerStyle,
                                 userMessageTextStyle: style.userMessageTextStyle,
-                                aiMessageContainerStyle: style.aiMessageContainerStyle,
-                                aiMessageTextStyle: style.aiMessageTextStyle,
 
                             }}
                         />
@@ -182,8 +203,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                                 customStyle={{
                                     userMessageContainerStyle: style.userMessageContainerStyle,
                                     userMessageTextStyle: style.userMessageTextStyle,
-                                    aiMessageContainerStyle: style.aiMessageContainerStyle,
-                                    aiMessageTextStyle: style.aiMessageTextStyle,
 
                                 }}
                             />
@@ -197,15 +216,15 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                     </div>
                 </div>
                 <div className="chatbot-send-message-container">
-                    {messages.length > 0 && <div className="superpowered-reset-chat-container">
-                        <p className="superpowered-reset-chat-text" onClick={() => resetChat()}>
-                            Reset chat
-                        </p>
-                    </div>}
+
                     <ChatInput
                         sendMessage={(message) => sendMessage(message)}
                         placeholderText={placeholderText}
                     />
+                    <div style={{ display: "flex", flexDirection: "row", textAlign: "right" }}>
+                        <p className="powered-by-sp-promo-text-grey">{"Powered by "}</p>
+                        <p className="powered-by-sp-promo-text">{"superpowered.ai"}</p>
+                    </div>
                 </div>
             </div>
         )
@@ -218,32 +237,27 @@ SuperpoweredChatbot.defaultProps = {
     apiKey: "",
     apiSecret: "",
     headerText: "",
-    initialMessage: "Hello, how can I help you",
-    placeholderText: "Type a message...",
+    initialMessage: "Hello, how can I help you?",
+    placeholderText: "Type a message",
     headerLogo: null,
     chatConfig: {
         knowledgeBaseIds: [],
-        model: ["gpt-3.5-turbo"],
+        //model: "gpt-3.5-turbo",
         useRSE: true,
         temperature: 0.1,
-        targetSegmentLength: "short",
-        system_message: ""
+        targetSegmentLength: "medium",
+        systemMessage: ""
     },
     style: {
         chatBubbleStyle: {},
         chatBubbleIconStyle: {},
+        chatContainerWidth: "500px",
+        chatContainerMaxHeight: "90vh",
         userMessageContainerStyle: {},
         userMessageTextStyle: {},
-        aiMessageContainerStyle: {},
-        aiMessageTextStyle: {},
-        chatContainerStyle: {
-            maxHeight: "500px",
-        },
-        headerContainerStyle: {},
         headerTextStyle: {}
     }
 }
-
 
 
 interface ChatMessageProps {
@@ -254,8 +268,8 @@ interface ChatMessageProps {
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, customStyle }) => {
 
-    const customContainerStyle = aiOrUser === "ai" ? customStyle.aiMessageContainerStyle : customStyle.userMessageContainerStyle;
-    const customTextStyle = aiOrUser === "ai" ? customStyle.aiMessageTextStyle : customStyle.userMessageTextStyle;
+    const customContainerStyle = aiOrUser === "ai" ? {} : customStyle.userMessageContainerStyle;
+    const customTextStyle = aiOrUser === "ai" ? {} : customStyle.userMessageTextStyle;
 
     return (
         <div className={`${aiOrUser}-chat-message-container`} style={customContainerStyle}>

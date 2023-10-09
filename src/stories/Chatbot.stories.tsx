@@ -91,10 +91,8 @@ export const FullProps = {
         initialMessage: "Hello, how can I help you today?",
         placeholderText: "Type a message",
         style: {
-            chatContainerStyle: {
-                width: "500px",
-                maxHeight: "90vh"
-            },
+            chatContainerWidth: "550px",
+            chatContainerMaxHeight: "90vh",
             chatBubbleStyle: {
                 backgroundColor: "#fafafa"
             },

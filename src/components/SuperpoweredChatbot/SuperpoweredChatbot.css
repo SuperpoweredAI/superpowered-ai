@@ -46,7 +46,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: #ebebeb;
+    background-color: white;
     padding: 15px 12px;
 }
 
@@ -163,4 +163,21 @@
     font-size: 34px;
     margin-bottom: 54px;
     color: var(--medium-gray);
+}
+
+.powered-by-sp-promo-text, .powered-by-sp-promo-text-grey {
+    font-family: "Inter";
+    font-weight: 800;
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 2px;
+    color: #5D24D8;
+    text-align: right;
+}
+
+.powered-by-sp-promo-text-grey {
+    font-weight: 400;
+    color: #8F8F8F;
+    margin-right: 4px;
+    text-align: right;
 }
