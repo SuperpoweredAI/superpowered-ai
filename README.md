@@ -27,7 +27,7 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 ## Props
 
 | Prop | Required | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
+| ---- | -------- | ---- | ------- | ----------- |
 | apiKey | Yes | string | "" | Superpowered AI API key |
 | apiSecret | Yes | string | "" | Superpowered AI API secret |
 | headerLogo | No | React.node | null | The logo (if any) you want displayed next to the title |
