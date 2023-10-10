@@ -1,5 +1,5 @@
 
-.superpowered-chatbot-container-closed {
+.superpowered-chatbot-container-closed-light, .superpowered-chatbot-container-closed-dark {
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -16,15 +16,19 @@
     cursor: pointer;
 }
 
-.superpowered-chat-icon {
-    color: white;
+.superpowered-chatbot-container-closed-dark {
+    background-color: #383838;
+}
+
+.superpowered-chat-icon-light, .superpowered-chat-icon-dark {
+    color: #f7f7f7;
     font-size: 30px;
     /* Add margin to make the icon look centered */
     margin-top: 5px;
     margin-left: 1px;
 }
 
-.superpowered-chatbot-container {
+.superpowered-chatbot-container-light, .superpowered-chatbot-container-dark {
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -38,10 +42,13 @@
     box-shadow: 0px 0px 8px 2px rgba(0,0,0,0.2);
     border-radius: 8px;
     overflow: hidden;
-    background-color: white;
 }
 
-.superpowered-chatbot-header-container {
+.superpowered-chatbot-container-dark {
+    background-color: #383838;
+}
+
+.superpowered-chatbot-header-container-light, .superpowered-chatbot-header-container-dark {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -50,7 +57,11 @@
     padding: 15px 12px;
 }
 
-.superpowered-chatbot-header-text {
+.superpowered-chatbot-header-container-dark {
+    background-color: #383838;
+}
+
+.superpowered-chatbot-header-text-light, .superpowered-chatbot-header-text-dark {
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
@@ -59,13 +70,17 @@
     color: #383838;
 }
 
+.superpowered-chatbot-header-text-dark {
+    color: #f7f7f7;
+}
+
 .superpowered-chatbot-header-logo {
     width: 25px;
     height: 25px;
     margin-right: 12px;
 }
 
-.superpowered-chatbot-messages-container {
+.superpowered-chatbot-messages-container-light, .superpowered-chatbot-messages-container-dark {
     display: flex;
     background-color: white;
     flex-direction: column;
@@ -75,13 +90,21 @@
     overflow-y: auto;
 }
 
-.minimize-icon {
+.superpowered-chatbot-messages-container-dark {
+    background-color: #383838;
+}
+
+.minimize-icon-light, .minimize-icon-dark {
     color: 383838;
     font-size: 20px;
     cursor: pointer;
 }
 
-.chatbot-send-message-container {
+.minimize-icon-dark {
+    color: #f7f7f7;
+}
+
+.chatbot-send-message-container-light, .chatbot-send-message-container-dark {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -92,7 +115,11 @@
     box-sizing: border-box;
 }
 
-.ai-chat-message-container, .user-chat-message-container {
+.chatbot-send-message-container-dark {
+    background-color: #383838;
+}
+
+.ai-chat-message-container-light, .user-chat-message-container-light, .ai-chat-message-container-dark, .user-chat-message-container-dark {
     display: flex;
     background-color: #f7f7f7;
     padding: 8px 15px;
@@ -103,13 +130,17 @@
     border-radius: 8px;
 }
 
-.user-chat-message-container {
+.ai-chat-message-container-dark {
+    background-color: #4F4F4F;
+}
+
+.user-chat-message-container-light, .user-chat-message-container-dark {
     background-color: #5D24D8;
     /* Align this container to the right of the parent container */
     align-self: flex-end;
 }
 
-.user-chat-message, .ai-chat-message {
+.user-chat-message-light, .ai-chat-message-light, .user-chat-message-dark, .ai-chat-message-dark {
     font-family: "Inter";
     font-weight: 400;
     font-size: 14px;
@@ -120,8 +151,12 @@
     color: #383838;
 }
 
-.user-chat-message {
-    color: #FAFAFA;
+.ai-chat-message-dark {
+    color: #f7f7f7;
+}
+
+.user-chat-message-light, .user-chat-message-dark {
+    color: #f7f7f7;
 }
 
 .superpowered-reset-chat-container {
@@ -162,10 +197,10 @@
     font-weight: 500;
     font-size: 34px;
     margin-bottom: 54px;
-    color: var(--medium-gray);
+    color: #8F8F8F;
 }
 
-.powered-by-sp-promo-text, .powered-by-sp-promo-text-grey {
+.powered-by-sp-promo-text, .powered-by-sp-promo-text-grey-light, .powered-by-sp-promo-text-grey-dark {
     font-family: "Inter";
     font-weight: 800;
     font-size: 12px;
@@ -175,9 +210,13 @@
     text-align: right;
 }
 
-.powered-by-sp-promo-text-grey {
+.powered-by-sp-promo-text-grey-lightm, .powered-by-sp-promo-text-grey-dark {
     font-weight: 400;
     color: #8F8F8F;
     margin-right: 4px;
     text-align: right;
+}
+
+.powered-by-sp-promo-text-grey-dark {
+    color: #AEAEAE;
 }

@@ -23,10 +23,10 @@
     resize: none;
 }
 
-/*.chat-input-dark {
-    background-color: var(--dark-theme-card-background);
-    color: var(--divider-line-gray);
-}*/
+.chatbot-input-dark {
+    background-color: #4F4F4F;
+    color: #E8E8E8;
+}
 
 .chatbot-input-row-light, .chatbot-input-row-dark {
     width: 100%;
@@ -39,9 +39,9 @@
     background-color: #fff;
 }
 
-/*.chat-input-row-dark {
-    background-color: var(--dark-theme-card-background);
-}*/
+.chatbot-input-row-dark {
+    background-color: #4F4F4F;
+}
 
 .chatbot-input-light:focus, .chatbot-input-dark:focus {
     outline: none;

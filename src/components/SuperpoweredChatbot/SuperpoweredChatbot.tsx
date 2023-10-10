@@ -15,6 +15,7 @@ interface SuperpoweredChatbot {
     style: Style;
     headerLogo: any,
     headerText: string,
+    darkMode: boolean,
     placeholderText: string,
     initialMessage: string,
     chatConfig: ChatConfig,
@@ -44,12 +45,14 @@ interface MessageInterace {
     content: string;
 }
 
-const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, placeholderText, initialMessage, chatConfig }) => {
+const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, darkMode, placeholderText, initialMessage, chatConfig }) => {
 
     let maxContainerHeight = "90vh"
     if (style.chatContainerMaxHeight !== undefined) {
         maxContainerHeight = style.chatContainerMaxHeight;
     }
+
+    const theme = darkMode ? "dark" : "light";
 
     const messageRef = useRef<HTMLDivElement>(null);
 
@@ -137,11 +140,11 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
 
         return (
             <div
-                className="superpowered-chatbot-container-closed"
+                className={`superpowered-chatbot-container-closed-${theme}`}
                 onClick={() => toggleVisibility()}
                 style={style.chatBubbleStyle}>
                 <IconContext.Provider
-                    value={{ ...{ className: 'superpowered-chat-icon' }, ...style.chatBubbleIconStyle }}>
+                    value={{ ...{ className: `superpowered-chat-icon-${theme}` }, ...style.chatBubbleIconStyle }}>
                     <div>
                         <BiChat />
                     </div>
@@ -151,31 +154,32 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     } else {
 
         return (
-            <div className="superpowered-chatbot-container" style={{width: style.chatContainerWidth}}>
+            <div className={`superpowered-chatbot-container-${theme}`} style={{width: style.chatContainerWidth}}>
                 <div>
-                    <div className="superpowered-chatbot-header-container">
+                    <div className={`superpowered-chatbot-header-container-${theme}`}>
                         <div style={{ display: "flex", flexDirection: "row" }}>
                             {(headerLogo !== undefined && headerLogo !== null) && <img
                                 className="superpowered-chatbot-header-logo"
                                 src={headerLogo}/>
                             }
-                            <p className="superpowered-chatbot-header-text" style={style.headerTextStyle}>
+                            <p className={`superpowered-chatbot-header-text-${theme}`} style={style.headerTextStyle}>
                                 {headerText}
                             </p>
                         </div>
 
                         <div>
                             <IconContext.Provider
-                                value={{ className: `minimize-icon` }}>
+                                value={{ className: `minimize-icon-${theme}` }}>
                                 <div onClick={() => toggleVisibility()}>
                                     <BiMinus />
                                 </div>
                             </IconContext.Provider>
                         </div>
                     </div>
-                    <div className="superpowered-chatbot-messages-container" style={{ maxHeight: `calc(${maxContainerHeight} - 170px)` }}>
+                    <div className={`superpowered-chatbot-messages-container-${theme}`} style={{ maxHeight: `calc(${maxContainerHeight} - 170px)` }}>
                         <ChatMessage
                             aiOrUser={"ai"}
+                            theme={theme}
                             message={initialMessage}
                             customStyle={{
                                 userMessageContainerStyle: style.userMessageContainerStyle,
@@ -186,6 +190,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                         {messages.map((message: MessageInterace, index: number) =>
                             <ChatMessage
                                 key={index}
+                                theme={theme}
                                 aiOrUser={message.aiOrUser}
                                 message={message.content}
                                 customStyle={{
@@ -203,14 +208,15 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                         <div ref={messageRef}></div>
                     </div>
                 </div>
-                <div className="chatbot-send-message-container">
+                <div className={`chatbot-send-message-container-${theme}`}>
 
                     <ChatInput
                         sendMessage={(message) => sendMessage(message)}
                         placeholderText={placeholderText}
+                        theme={theme}
                     />
                     <div style={{ display: "flex", flexDirection: "row", textAlign: "right" }}>
-                        <p className="powered-by-sp-promo-text-grey">{"Powered by "}</p>
+                        <p className={`powered-by-sp-promo-text-grey-${theme}`}>{"Powered by "}</p>
                         <p className="powered-by-sp-promo-text">{"superpowered.ai"}</p>
                     </div>
                 </div>
@@ -225,6 +231,7 @@ SuperpoweredChatbot.defaultProps = {
     apiKey: "",
     apiSecret: "",
     headerText: "",
+    darkMode: false,
     initialMessage: "Hello, how can I help you?",
     placeholderText: "Type a message",
     headerLogo: null,
@@ -251,17 +258,18 @@ SuperpoweredChatbot.defaultProps = {
 interface ChatMessageProps {
     message: string;
     aiOrUser: string;
+    theme: string;
     customStyle: any;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, customStyle }) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, theme, customStyle }) => {
 
     const customContainerStyle = aiOrUser === "ai" ? {} : customStyle.userMessageContainerStyle;
     const customTextStyle = aiOrUser === "ai" ? {} : customStyle.userMessageTextStyle;
 
     return (
-        <div className={`${aiOrUser}-chat-message-container`} style={customContainerStyle}>
-            <p className={`${aiOrUser}-chat-message`} style={customTextStyle}>
+        <div className={`${aiOrUser}-chat-message-container-${theme}`} style={customContainerStyle}>
+            <p className={`${aiOrUser}-chat-message-${theme}`} style={customTextStyle}>
                 {message}
             </p>
         </div>

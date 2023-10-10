@@ -111,3 +111,20 @@ export const FullProps = {
         }
     ],
 }
+
+
+export const DarkMode = {
+    args: {
+        headerText: 'Superpowered',
+        headerLogo: superpoweredLogo,
+        initialMessage: "Hello, how can I help you today?",
+        placeholderText: "Type a message",
+        darkMode: true,
+    },
+    loaders: [
+        () => {
+            window.sessionStorage.setItem("superpoweredChatbotChatThreadId", "testId");
+            window.sessionStorage.setItem("superpoweredChatbotMessages", JSON.stringify(messages));
+        }
+    ],
+}
