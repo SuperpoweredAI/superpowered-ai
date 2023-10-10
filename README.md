@@ -33,7 +33,9 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | headerLogo | No | React.node | Auperpowered AI circular logo | The logo (if any) you want displayed next to the title. This gets sized to 25px by 25px. We highly recommend using a suqare or circular logo. |
 | headerTitle | No | string | "" | The title you want displayed at the top of the chatbot |
 | headerTextStyle | No | React.CSSProperties | - | Custom style of the header text |
-| darkMode | No | boolean | false | Use our dark theme mode |
+| darkMode | No | boolean | false | Use our dark theme colors |
+| initialMessage | No | string | "Hello, how can I help you?" | The welcome message that shows up when the chatbot is opened |
+| placeholderText | No | string | "Type a message" | Placeholder text in the chat input |
 | style | No | object | - | Style customization for the chatbot |
 | style.chatContainerMaxHeight | No | string | "90vh" | Max height for the chatbot in the opened state |
 | style.chatContainerWidth | No | string | "575px" | Width for the chatbot in the opened state |
