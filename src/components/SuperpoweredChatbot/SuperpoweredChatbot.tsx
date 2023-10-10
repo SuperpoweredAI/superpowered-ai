@@ -24,9 +24,9 @@ interface ChatConfig {
     knowledgeBaseIds: string[];
     systemMessage: string;
     //model: string;
-    useRSE: boolean;
-    temperature: number;
     targetSegmentLength: string;
+    temperature: number;
+    useRSE: boolean;
 }
 
 interface Style {
