@@ -93,7 +93,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled,
                 />
                 <div className="chatbot-send-icon-container" onClick={() => { sendMessage(message); setMessage("") }}>
                     <IconContext.Provider
-                        value={{className: `send-icon-${theme}`}}>
+                        value={{className: `chatbot-send-icon-${theme}`}}>
                         <div>
                             <RiSendPlaneFill />
                         </div>

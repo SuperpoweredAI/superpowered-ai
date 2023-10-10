@@ -268,8 +268,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, theme, cus
     const customTextStyle = aiOrUser === "ai" ? {} : customStyle.userMessageTextStyle;
 
     return (
-        <div className={`${aiOrUser}-chat-message-container-${theme}`} style={customContainerStyle}>
-            <p className={`${aiOrUser}-chat-message-${theme}`} style={customTextStyle}>
+        <div className={`chatbot-${aiOrUser}-chat-message-container-${theme}`} style={customContainerStyle}>
+            <p className={`chatbot-${aiOrUser}-chat-message-${theme}`} style={customTextStyle}>
                 {message}
             </p>
         </div>
