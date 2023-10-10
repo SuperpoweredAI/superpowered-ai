@@ -36,10 +36,6 @@ interface Style {
     chatBubbleIconStyle: React.CSSProperties;
     userMessageContainerStyle: React.CSSProperties;
     userMessageTextStyle: React.CSSProperties;
-    //aiMessageContainerStyle: React.CSSProperties;
-    //aiMessageTextStyle: React.CSSProperties;
-    //headerContainerStyle: React.CSSProperties;
-    //headerLogoStyle: React.CSSProperties;
     headerTextStyle: React.CSSProperties;
 }
 
@@ -110,14 +106,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
             //TODO: Handle error
             // This probably means the api key and/or secret aren't valid
         }
-    }
-
-    function resetChat() {
-        // Set the messages to an empty list
-        setMessages([]);
-        sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify([]));
-        // Create a new chat thread
-        createNewChatThread()
     }
 
     function toggleVisibility() {
