@@ -27,6 +27,8 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 
 ## Props
 
+For full detail about the chat configuration parameters, check out our documentation [here](https://superpoweredai.notion.site)
+
 | Prop | Required | Type | Default | Description |
 | ---- | -------- | ---- | ------- | ----------- |
 | apiKey | Yes | string | "" | Superpowered AI API key |
@@ -38,7 +40,7 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | initialMessage | No | string | "Hello, how can I help you?" | The welcome message that shows up when the chatbot is opened |
 | placeholderText | No | string | "Type a message" | Placeholder text in the chat input |
 | style | No | object | - | Style customization for the chatbot |
-| style.chatContainerMaxHeight | No | string | "90vh" | Max height for the chatbot in the opened state |
+| style.chatContainerMaxHeight | No | string | "90vh" | Max height for the chatbot in the opened state. Beyond this height the message container will scroll vertically. |
 | style.chatContainerWidth | No | string | "575px" | Width for the chatbot in the opened state |
 | style.chatBubbleStyle | No | React.CSSProperties | - | Custom style for the floating chat bubble (closed state) |
 | style.chatBubbleIconStyle | No | React.CSSProperties | - | Custom style for the icon in the floating chat bubble (closed state) |
