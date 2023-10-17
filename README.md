@@ -1,10 +1,6 @@
 ## Pre-requisites
 You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. If you do not have an account, you can sign up for one for free here https://superpowered.ai.
 
-**DO NOT** keep your API key and secret in plain text in your application (or in a .env file as those can still be seen).
-
-We also recommend frequently rotating your API key and secret. You can easily delete and create new keys in the Superpowered UI.
-
 
 ## Installation
 `npm install superpowered-ai`
@@ -54,6 +50,12 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | chatConfig.temperature | No | number | 0.1 | This controls the creativity of responses. Set this close to 0 reduce the risk of hallucinations, and closer to 1 for more creative responses. |
 | chatConfig.useRSE | No | boolean | true | Relevant Segment Extraction (RSE) is an optional (but strongly recommended) post-processing step that takes clusters of relevant chunks and intelligently combines them into longer sections of text that we call segments.​​ These segments provide better context to the LLM than any individual chunk can. |
 
+
+## Security
+
+**DO NOT** keep your API key and secret in plain text in your application (or in a .env file as those can still be seen).
+
+We also recommend frequently rotating your API key and secret. You can easily delete and create new keys in the Superpowered UI.
 
 
 ## Recommendations
