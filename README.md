@@ -15,6 +15,7 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
     apiSecret={"YOUR_API_SECRET"}
     headerLogo={YOUR_LOGO}
     headerText="Superpowered AI"
+    darkMode={true}
     initialMessage="Welcome to Superpowered AI. How can I help you?"
     placeholderText="Type a message..."
     chatConfig={{
@@ -29,13 +30,13 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 
 For full detail about the chat configuration parameters, check out our documentation [here](https://superpoweredai.notion.site)
 
+
 | Prop | Required | Type | Default | Description |
 | ---- | -------- | ---- | ------- | ----------- |
 | apiKey | Yes | string | "" | Superpowered AI API key |
 | apiSecret | Yes | string | "" | Superpowered AI API secret |
 | headerLogo | No | React.node | Superpowered AI circular logo | The logo (if any) you want displayed next to the title. This gets sized to 25px by 25px. We highly recommend using a suqare or circular logo. |
 | headerTitle | No | string | "" | The title you want displayed at the top of the chatbot |
-| headerTextStyle | No | React.CSSProperties | - | Custom style of the header text |
 | darkMode | No | boolean | false | Use our dark theme colors |
 | initialMessage | No | string | "Hello, how can I help you?" | The welcome message that shows up when the chatbot is opened |
 | placeholderText | No | string | "Type a message" | Placeholder text in the chat input |
@@ -44,6 +45,7 @@ For full detail about the chat configuration parameters, check out our documenta
 | style.chatContainerWidth | No | string | "575px" | Width for the chatbot in the opened state |
 | style.chatBubbleStyle | No | React.CSSProperties | - | Custom style for the floating chat bubble (closed state) |
 | style.chatBubbleIconStyle | No | React.CSSProperties | - | Custom style for the icon in the floating chat bubble (closed state) |
+| style.headerTextStyle | No | React.CSSProperties | - | Custom style of the header text |
 | style.userMessageContainerStyle | No | React.CSSProperties | - | Custom style for the user message container |
 | style.userMessageTextStyle | No | React.CSSProperties | - | Custom style for the user message text |
 | chatConfig | Yes | object | - | Configuration parameters for your chatbot. Learn more about chat configuration [here](https://superpoweredai.notion.site) |
@@ -65,10 +67,10 @@ We also recommend frequently rotating your API key and secret. You can easily de
 While some of the parameters are not required, we highly recommend that you make use of the following in order to get the most out of your chatbot:
 
 1. Header logo and title
-- Please use your own logo and title in order to customize it to match your site.
+- Please use your own logo and title in order to customize the chatbot to match your site.
 
 2. System message:
-- The system message lets you instruct the LLM to behave in a certain way. You can also use it to give the LLM context about what its role is. For example, “You are a customer service bot for Superpowered AI. Superpowered AI is a knowledge base as a service provider for LLM applications… You should ONLY discuss Superpowered AI’s products and politely refuse to answer unrelated questions.” Don’t be afraid to make this multiple paragraphs long with a lot of detail and examples.
+- We highly recommend creating a detailed system message specific to your use case. This will result in much more relevant responses for your users. Check out our documentation for an example of how we crafted a system message for our site.
 
 
 ## Support
