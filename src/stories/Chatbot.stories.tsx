@@ -19,7 +19,6 @@ export default {
 };
 
 
-
 export const Primary = {
     args: {
         headerText: 'Superpowered',

@@ -1,6 +1,6 @@
 {
   "name": "superpowered-ai",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "",
   "keywords": ["superpowered", "chatbot", "chat", "chatgpt", "developer"],
   "main": "dist/cjs/index.js",
