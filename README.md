@@ -13,8 +13,9 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 <SuperpoweredChatbot
     apiKey={"YOUR_API_KEY"}
     apiSecret={"YOUR_API_SECRET"}
-    headerLogo=""
+    headerLogo={YOUR_LOGO}
     headerText="Superpowered AI"
+    initialMessage="Welcome to Superpowered AI. How can I help you?"
     placeholderText="Type a message..."
     chatConfig={{
         knowledgeBaseIds: [],
@@ -45,7 +46,7 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 | style.userMessageTextStyle | No | React.CSSProperties | - | Custom style for the user message text |
 | chatConfig | Yes | object | - | Configuration parameters for your chatbot. Learn more about chat configuration [here](https://superpoweredai.notion.site) |
 | chatConfig.knowledgeBaseIds | Yes | array | [] | List of Superpowered AI knowledge base ids to give the chatbot access to |
-| chatConfig.systemMessage | No | string | "" | If set to Yes, then we’ll pass the knowledge base search results to an LLM and instruct it to summarize the results as they pertain to the query. |
+| chatConfig.systemMessage | No | string | "" | The system message lets you instruct the LLM to behave in a certain way. You can also use it to give the LLM context about what its role is. For example, “You are a customer service bot for Superpowered AI. Superpowered AI is a knowledge base as a service provider for LLM applications… You should ONLY discuss Superpowered AI’s products and politely refuse to answer unrelated questions.” Don’t be afraid to make this multiple paragraphs long with a lot of detail and examples. |
 | chatConfig.targetSegmentLength | No | string | "medium" | This parameter controls the average length of the segments that get created. For more complex tasks it usually works better to use medium to long segments. Only used when RSE is set to Yes. |
 | chatConfig.temperature | No | number | 0.1 | This controls the creativity of responses. Set this close to 0 reduce the risk of hallucinations, and closer to 1 for more creative responses. |
 | chatConfig.useRSE | No | boolean | true | Relevant Segment Extraction (RSE) is an optional (but strongly recommended) post-processing step that takes clusters of relevant chunks and intelligently combines them into longer sections of text that we call segments.​​ These segments provide better context to the LLM than any individual chunk can. |
