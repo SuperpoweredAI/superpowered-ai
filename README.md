@@ -65,7 +65,7 @@ While some of the parameters are not required, we highly recommend that you make
 - Please use your own logo and title in order to customize it to match your site.
 
 2. System message:
-- A good system message is crucial for getting excellent responses. 
+- The system message lets you instruct the LLM to behave in a certain way. You can also use it to give the LLM context about what its role is. For example, “You are a customer service bot for Superpowered AI. Superpowered AI is a knowledge base as a service provider for LLM applications… You should ONLY discuss Superpowered AI’s products and politely refuse to answer unrelated questions.” Don’t be afraid to make this multiple paragraphs long with a lot of detail and examples.
 
 
 ## Support
