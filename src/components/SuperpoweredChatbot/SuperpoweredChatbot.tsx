@@ -5,6 +5,7 @@ import { BiChat, BiMinus } from 'react-icons/bi';
 import { IconContext } from 'react-icons';
 
 import { getChatThreadResponse, createChatThread } from '../../services/chat';
+const superpoweredLogo = require('../../assets/superpowered-logo-blue.png')
 
 import './SuperpoweredChatbot.css';
 
@@ -13,7 +14,7 @@ interface SuperpoweredChatbot {
     apiKey: string;
     apiSecret: string;
     style: Style;
-    headerLogo: any,
+    headerLogo: string,
     headerText: string,
     darkMode: boolean,
     placeholderText: string,
@@ -154,14 +155,13 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     } else {
 
         return (
-            <div className={`superpowered-chatbot-container-${theme}`} style={{width: style.chatContainerWidth}}>
+            <div className={`superpowered-chatbot-container-${theme}`} style={{ width: style.chatContainerWidth }}>
                 <div>
                     <div className={`superpowered-chatbot-header-container-${theme}`}>
                         <div style={{ display: "flex", flexDirection: "row" }}>
-                            {(headerLogo !== undefined && headerLogo !== null) && <img
+                            <img
                                 className="superpowered-chatbot-header-logo"
-                                src={headerLogo}/>
-                            }
+                                src={headerLogo} />
                             <p className={`superpowered-chatbot-header-text-${theme}`} style={style.headerTextStyle}>
                                 {headerText}
                             </p>
@@ -234,7 +234,7 @@ SuperpoweredChatbot.defaultProps = {
     darkMode: false,
     initialMessage: "Hello, how can I help you?",
     placeholderText: "Type a message",
-    headerLogo: null,
+    headerLogo: superpoweredLogo,
     chatConfig: {
         knowledgeBaseIds: [],
         //model: "gpt-3.5-turbo",
