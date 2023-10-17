@@ -1,6 +1,8 @@
 ## Pre-requisites
-You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. If you do not have an account, you can sign up for one for free here https://superpowered.ai. 
+You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. If you do not have an account, you can sign up for one for free here https://superpowered.ai.
+
 **DO NOT** keep your API key and secret in plain text in your application (or in a .env file as those can still be seen).
+
 We also recommend frequently rotating your API key and secret. You can easily delete and create new keys in the Superpowered UI.
 
 
