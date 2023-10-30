@@ -244,7 +244,7 @@ SuperpoweredChatbot.defaultProps = {
     style: {
         chatBubbleStyle: {},
         chatBubbleIconStyle: {},
-        chatContainerWidth: "500px",
+        chatContainerWidth: "575px",
         chatContainerMaxHeight: "90vh",
         userMessageContainerStyle: {},
         userMessageTextStyle: {},
