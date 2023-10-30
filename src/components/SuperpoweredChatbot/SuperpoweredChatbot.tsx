@@ -25,7 +25,6 @@ interface SuperpoweredChatbot {
 interface ChatConfig {
     knowledgeBaseIds: string[];
     systemMessage: string;
-    //model: string;
     targetSegmentLength: string;
     temperature: number;
     useRSE: boolean;
@@ -75,7 +74,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     async function sendMessage(message: string) {
 
         const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
-        const model = "gpt-3.5-turbo"//chatConfig.model == undefined ? "gpt-3.5-turbo" : chatConfig.model;
+        const model = "gpt-3.5-turbo"// Only model supported at the moment
         const temperature = chatConfig.temperature == undefined ? 0 : chatConfig.temperature;
         const systemMessage = chatConfig.systemMessage == undefined ? "" : chatConfig.systemMessage;
         const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
@@ -237,7 +236,6 @@ SuperpoweredChatbot.defaultProps = {
     headerLogo: superpoweredLogo,
     chatConfig: {
         knowledgeBaseIds: [],
-        //model: "gpt-3.5-turbo",
         useRSE: true,
         temperature: 0.1,
         targetSegmentLength: "medium",

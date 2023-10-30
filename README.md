@@ -1,5 +1,6 @@
 ## Pre-requisites
-You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. If you do not have an account, you can sign up for one for free here https://superpowered.ai.
+You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. **DO NOT** use an "account" level api key. Restrict your key to "chat-essential"
+If you do not have an account, you can sign up for one for free [here](https://superpowered.ai).
 
 
 ## Installation
