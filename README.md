@@ -1,8 +1,7 @@
 ## Pre-requisites
 You must have a Superpowered AI account. You will need an `api key` and `api secret` in order to make requests. If you do not have an account, you can sign up for one for free [here](https://superpowered.ai). 
 
-API keys can be created in the `API Keys` tab in the UI. **DO NOT** use an `account` level api key. Restrict your key to `chat-essential`.
-
+API keys can be created in the `API Keys` tab in the UI. 
 
 ## Installation
 `npm install superpowered-ai`
@@ -59,10 +58,8 @@ For full detail about the chat configuration parameters, check out our documenta
 
 
 ## Security
-
-**DO NOT** keep your API key and secret in plain text in your application (or in a .env file as those can still be seen).
-
-We also recommend frequently rotating your API key and secret. You can easily delete and create new keys in the Superpowered UI.
+**DO NOT** use a `server-side` api key. Please only use a `client-side` key.
+Depending on your application, it could also be recommended to rotate your API key and secret. You can easily delete and create new keys in the Superpowered UI.
 
 
 ## Recommendations
