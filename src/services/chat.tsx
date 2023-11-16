@@ -53,7 +53,8 @@ export async function getChatThreadResponse(
     temperature: number = 0,
     system_message: string = "",
     useRSE: boolean = true,
-    targetSegmentLength: string = "medium"
+    targetSegmentLength: string = "medium",
+    responseLength: string = "short"
 ): Promise<[any, number]> {
 
     const payload = {
@@ -65,6 +66,7 @@ export async function getChatThreadResponse(
         segment_length: targetSegmentLength,
         system_message: system_message,
         knowledge_base_ids: knowledge_base_ids,
+        response_length: responseLength
     }
 
     console.log("payload", payload)

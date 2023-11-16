@@ -10,7 +10,7 @@ import { breakResponseIntoChunks } from '../../logic/chat';
 //const superpoweredLogo = require('../../assets/superpowered-logo-blue.png')
 
 import './SuperpoweredChatbot.css';
-
+console.log(require.resolve('react'));
 
 interface SuperpoweredChatbot {
     apiKey: string;
@@ -31,6 +31,7 @@ interface ChatConfig {
     targetSegmentLength: string;
     temperature: number;
     useRSE: boolean;
+    responseLength: string
 }
 
 interface Style {
@@ -82,14 +83,15 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
         const systemMessage = chatConfig.systemMessage == undefined ? "" : chatConfig.systemMessage;
         const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
         const targetSegmentLength = chatConfig.targetSegmentLength == undefined ? "medium" : chatConfig.targetSegmentLength;
+        const responseLength = chatConfig.responseLength == undefined ? "short" : chatConfig.responseLength;
 
         setShowThinkingDots(true)
         // Add the message to the messages list
         let newMessages = [...(messages || []), { aiOrUser: "user", content: message }];
         setMessages(newMessages);
-        //sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessages));
         const [resData, status] = await getChatThreadResponse(
-            authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, systemMessage, useRSE, targetSegmentLength
+            authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, 
+            systemMessage, useRSE, targetSegmentLength, responseLength
         );
 
         console.log("resData", resData)
@@ -135,10 +137,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                             const newAiResponse = {
                                 aiOrUser: "ai",
                                 content: modelResponseText + chunks[i],
-                                /*sources: [], // Don't show the sources yet
-                                searchResults: [],
-                                searchQueries: [],*/
-                                //id: `ai_${resData["response"]["interaction"]["id"]}`
                             };
                             // newChatMessages won't get updated in this loop. It is a constant, not a state variable
                             const newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
@@ -168,21 +166,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 }
             }
 
-            // update the chat thread with the AI response in the state variable
-            /*const newAiResponse = {
-                aiOrUser: "ai",
-                content: resData["response"]["interaction"]["model_response"]["content"],
-                sources: [],
-                searchResults: resData["response"]["interaction"]["ranked_results"],
-                searchQueries: resData["response"]["interaction"]["search_queries"],
-                id: `ai_${resData["response"]["interaction"]["id"]}`
-            };
-            const newMessagesWithAiResponse = [...newMessages, newAiResponse];*/
-
-            // Add the response to the messages list
-            //let newMessagesWithAiResponse = [...newMessages, { aiOrUser: "ai", content: resData.interaction.model_response.content }];
-            //setMessages(newMessagesWithAiResponse);
-            //sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessagesWithAiResponse));
         } else {
             //TODO: Handle error
             setShowThinkingDots(false)
@@ -330,7 +313,8 @@ SuperpoweredChatbot.defaultProps = {
         useRSE: true,
         temperature: 0.1,
         targetSegmentLength: "medium",
-        systemMessage: ""
+        systemMessage: "",
+        responseLength: "short"
     },
     style: {
         chatBubbleStyle: {},
