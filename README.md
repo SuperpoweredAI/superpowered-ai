@@ -27,10 +27,6 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 ```
 
 
-## Props
-For full detail about the chat configuration parameters, check out our documentation [here](https://superpoweredai.notion.site)
-
-
 ## Security
 **DO NOT** use a `server-side` api key. Please only use a `client-side` key.
 Depending on your application, it could also be recommended to rotate your API key and secret. You can easily delete and create new keys in the Superpowered UI.
@@ -45,6 +41,9 @@ While some of the parameters are not required, we highly recommend that you make
 2. System message:
 - We highly recommend creating a detailed system message specific to your use case. This will result in much more relevant responses for your users. Check out our documentation for an example of how we crafted a system message for our site.
 
+
+## Props
+For full detail about the chat configuration parameters, check out our documentation [here](https://superpoweredai.notion.site)
 
 | Prop | Required | Type | Default | Description |
 | ---- | -------- | ---- | ------- | ----------- |
