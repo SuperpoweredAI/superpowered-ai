@@ -10,9 +10,9 @@ interface Payload {
 }
 
 export async function createChatThread(
-    idToken: string,
+    authToken: string,
     knowledgeBaseIds: string[] = [],
-    model = "gpt-3.5-turbo",
+    model = "gpt-4",
     temperature = 0,
     systemMessage = ""): Promise<[any, number]> {
 
@@ -29,7 +29,7 @@ export async function createChatThread(
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": idToken
+                "Authorization": authToken
             },
             body: JSON.stringify({
                 default_options: payload,
@@ -57,6 +57,7 @@ export async function getChatThreadResponse(
 ): Promise<[any, number]> {
 
     const payload = {
+        async: true,
         input: input,
         model: model,
         temperature: temperature,
@@ -86,3 +87,22 @@ export async function getChatThreadResponse(
 
 }
 
+
+export async function pollChatResponse(authToken: string, pollURL: string): Promise<[any, number]> {
+
+    const response = await fetch(
+        pollURL,
+        {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": authToken
+            }
+        }
+    )
+
+    const resData = await response.json();
+    console.log("poll response", resData)
+    return [resData, response.status];
+
+}

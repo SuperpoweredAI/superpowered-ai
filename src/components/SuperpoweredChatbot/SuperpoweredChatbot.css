@@ -35,7 +35,7 @@
     justify-content: space-between;
     width: 575px;
     min-height: 325px;
-    max-height: 675px;
+    /*max-height: 675px;*/
     right: 20px;
     bottom: 20px;
     /* Give it a drop shadow */

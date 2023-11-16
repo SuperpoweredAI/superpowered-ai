@@ -50,6 +50,7 @@ For full detail about the chat configuration parameters, check out our documenta
 | style.userMessageContainerStyle | No | React.CSSProperties | - | Custom style for the user message container |
 | style.userMessageTextStyle | No | React.CSSProperties | - | Custom style for the user message text |
 | chatConfig | Yes | object | - | Configuration parameters for your chatbot. Learn more about chat configuration [here](https://superpoweredai.notion.site) |
+| chatConfig.model | No | string | "gpt-4" | Model to use. This can either be "gpt-4" or "gpt-3.5-turbo" |
 | chatConfig.knowledgeBaseIds | Yes | array | [] | List of Superpowered AI knowledge base ids to give the chatbot access to |
 | chatConfig.systemMessage | No | string | "" | The system message lets you instruct the LLM to behave in a certain way. You can also use it to give the LLM context about what its role is. For example, “You are a customer service bot for Superpowered AI. Superpowered AI is a knowledge base as a service provider for LLM applications… You should ONLY discuss Superpowered AI’s products and politely refuse to answer unrelated questions.” Don’t be afraid to make this multiple paragraphs long with a lot of detail and examples. |
 | chatConfig.targetSegmentLength | No | string | "medium" | This parameter controls the average length of the segments that get created. For more complex tasks it usually works better to use medium to long segments. Only used when RSE is set to Yes. |

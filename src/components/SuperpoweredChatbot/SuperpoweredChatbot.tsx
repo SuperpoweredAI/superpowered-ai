@@ -4,8 +4,10 @@ import ChatInput from './ChatInput';
 import { BiChat, BiMinus } from 'react-icons/bi';
 import { IconContext } from 'react-icons';
 
-import { getChatThreadResponse, createChatThread } from '../../services/chat';
-const superpoweredLogo = require('../../assets/superpowered-logo-blue.png')
+import { getChatThreadResponse, pollChatResponse, createChatThread } from '../../services/chat';
+import { breakResponseIntoChunks } from '../../logic/chat';
+//import superpoweredLogo from '../../assets/superpowered-logo-blue.png';
+//const superpoweredLogo = require('../../assets/superpowered-logo-blue.png')
 
 import './SuperpoweredChatbot.css';
 
@@ -23,6 +25,7 @@ interface SuperpoweredChatbot {
 }
 
 interface ChatConfig {
+    model: string;
     knowledgeBaseIds: string[];
     systemMessage: string;
     targetSegmentLength: string;
@@ -74,7 +77,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
     async function sendMessage(message: string) {
 
         const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
-        const model = "gpt-3.5-turbo"// Only model supported at the moment
+        const model = chatConfig.model == undefined ? "gpt-4" : chatConfig.model
         const temperature = chatConfig.temperature == undefined ? 0 : chatConfig.temperature;
         const systemMessage = chatConfig.systemMessage == undefined ? "" : chatConfig.systemMessage;
         const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
@@ -88,14 +91,93 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
         const [resData, status] = await getChatThreadResponse(
             authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, systemMessage, useRSE, targetSegmentLength
         );
-        setShowThinkingDots(false)
-        if (status === 200) {
+
+        console.log("resData", resData)
+        console.log("status", status)
+
+        //setShowThinkingDots(false)
+        if (status === 202) {
+
+            let responseStatus = resData["status"];
+            const pollURL = resData["status_url"];
+            console.log("pollURL", pollURL)
+
+            let pollCount = 0;
+            let modelResponseText = "";
+            while (responseStatus !== "COMPLETE" && pollCount < 200) {
+                let [resData, status] = await pollChatResponse(
+                    authToken, pollURL
+                );
+                responseStatus = resData["status"];
+
+                // Check for a status of FAILED
+                if (responseStatus === "FAILED") {
+                    break;
+                }
+                pollCount += 1;
+                console.log("pollCount", pollCount)
+
+                // Update the message if the status is IN_PROGRESS, and there is a model response
+                if (resData["response"]["interaction"]["model_response"] !== null && resData["response"]["interaction"]["model_response"]["content"] !== null) {
+                    const modelResponse = resData["response"]["interaction"]["model_response"]["content"];
+
+                    let chunks = breakResponseIntoChunks(modelResponseText, modelResponse)
+                    if (chunks.length > 0) {
+
+                        const sleepTime = (model == 'gpt-4' ? 500 : 250) / chunks.length;
+
+                        setShowThinkingDots(false);
+
+                        for (let i = 0; i < chunks.length; i++) {
+
+                            // update the chat thread with the AI response in the state variable
+                            const newAiResponse = {
+                                aiOrUser: "ai",
+                                content: modelResponseText + chunks[i],
+                                /*sources: [], // Don't show the sources yet
+                                searchResults: [],
+                                searchQueries: [],*/
+                                //id: `ai_${resData["response"]["interaction"]["id"]}`
+                            };
+                            // newChatMessages won't get updated in this loop. It is a constant, not a state variable
+                            const newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
+                            setMessages(newChatMessagesWithAiResponse);
+                            modelResponseText += chunks[i];
+
+                            await new Promise(r => setTimeout(r, sleepTime));
+                        }
+
+                    }
+
+                }
+
+                if (responseStatus === "COMPLETE") {
+                    break;
+                }
+                // Sleep for 0.25 seconds
+                if (resData["response"]["interaction"]["model_response"] == null || resData["response"]["interaction"]["model_response"]["content"] == null) {
+                    await new Promise(r => setTimeout(r, 500));
+                }
+            }
+
+            // update the chat thread with the AI response in the state variable
+            const newAiResponse = {
+                aiOrUser: "ai",
+                content: resData["response"]["interaction"]["model_response"]["content"],
+                /*sources: [],
+                searchResults: resData["response"]["interaction"]["ranked_results"],
+                searchQueries: resData["response"]["interaction"]["search_queries"],
+                id: `ai_${resData["response"]["interaction"]["id"]}`*/
+            };
+            const newMessagesWithAiResponse = [...newMessages, newAiResponse];
+
             // Add the response to the messages list
-            let newMessagesWithAiResponse = [...newMessages, { aiOrUser: "ai", content: resData.interaction.model_response.content }];
-            setMessages(newMessagesWithAiResponse);
+            //let newMessagesWithAiResponse = [...newMessages, { aiOrUser: "ai", content: resData.interaction.model_response.content }];
+            //setMessages(newMessagesWithAiResponse);
             sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessagesWithAiResponse));
         } else {
             //TODO: Handle error
+            setShowThinkingDots(false)
         }
     }
 
@@ -233,8 +315,9 @@ SuperpoweredChatbot.defaultProps = {
     darkMode: false,
     initialMessage: "Hello, how can I help you?",
     placeholderText: "Type a message",
-    headerLogo: superpoweredLogo,
+    headerLogo: "",
     chatConfig: {
+        model: "gpt-4",
         knowledgeBaseIds: [],
         useRSE: true,
         temperature: 0.1,

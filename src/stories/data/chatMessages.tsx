@@ -10,4 +10,6 @@ export const messages: MessageObject[] = [
     { aiOrUser: "ai", content: "The population of Paris is 2.141 million" },
     { aiOrUser: "user", content: "What is Superpowered" },
     { aiOrUser: "ai", content: "Superpowered is a company that makes audio software. They specialize in something that I don't even know, I'm just rambling at this point to add in more text for testing purposes." },
+    { aiOrUser: "user", content: "What is Superpowered" },
+    { aiOrUser: "ai", content: "Superpowered is a company that makes audio software. They specialize in something that I don't even know, I'm just rambling at this point to add in more text for testing purposes." },
 ]
