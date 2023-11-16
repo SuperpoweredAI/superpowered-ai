@@ -87,7 +87,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
         // Add the message to the messages list
         let newMessages = [...(messages || []), { aiOrUser: "user", content: message }];
         setMessages(newMessages);
-        sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessages));
+        //sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessages));
         const [resData, status] = await getChatThreadResponse(
             authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, systemMessage, useRSE, targetSegmentLength
         );
@@ -117,6 +117,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 pollCount += 1;
                 console.log("pollCount", pollCount)
 
+                let newChatMessagesWithAiResponse = [...newMessages];
                 // Update the message if the status is IN_PROGRESS, and there is a model response
                 if (resData["response"]["interaction"]["model_response"] !== null && resData["response"]["interaction"]["model_response"]["content"] !== null) {
                     const modelResponse = resData["response"]["interaction"]["model_response"]["content"];
@@ -152,6 +153,13 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 }
 
                 if (responseStatus === "COMPLETE") {
+                    const newAiResponse = {
+                        aiOrUser: "ai",
+                        content: resData["response"]["interaction"]["model_response"]["content"]
+                    };
+                    newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
+                    console.log("Setting the session storage item", newChatMessagesWithAiResponse)
+                    sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newChatMessagesWithAiResponse));
                     break;
                 }
                 // Sleep for 0.25 seconds
@@ -161,20 +169,20 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
             }
 
             // update the chat thread with the AI response in the state variable
-            const newAiResponse = {
+            /*const newAiResponse = {
                 aiOrUser: "ai",
                 content: resData["response"]["interaction"]["model_response"]["content"],
-                /*sources: [],
+                sources: [],
                 searchResults: resData["response"]["interaction"]["ranked_results"],
                 searchQueries: resData["response"]["interaction"]["search_queries"],
-                id: `ai_${resData["response"]["interaction"]["id"]}`*/
+                id: `ai_${resData["response"]["interaction"]["id"]}`
             };
-            const newMessagesWithAiResponse = [...newMessages, newAiResponse];
+            const newMessagesWithAiResponse = [...newMessages, newAiResponse];*/
 
             // Add the response to the messages list
             //let newMessagesWithAiResponse = [...newMessages, { aiOrUser: "ai", content: resData.interaction.model_response.content }];
             //setMessages(newMessagesWithAiResponse);
-            sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessagesWithAiResponse));
+            //sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newMessagesWithAiResponse));
         } else {
             //TODO: Handle error
             setShowThinkingDots(false)
