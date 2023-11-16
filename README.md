@@ -28,15 +28,29 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
 
 
 ## Props
-
 For full detail about the chat configuration parameters, check out our documentation [here](https://superpoweredai.notion.site)
+
+
+## Security
+**DO NOT** use a `server-side` api key. Please only use a `client-side` key.
+Depending on your application, it could also be recommended to rotate your API key and secret. You can easily delete and create new keys in the Superpowered UI.
+
+
+## Recommendations
+While some of the parameters are not required, we highly recommend that you make use of the following in order to get the most out of your chatbot:
+
+1. Header logo and title
+- Please use your own logo and title in order to customize the chatbot to match your site.
+
+2. System message:
+- We highly recommend creating a detailed system message specific to your use case. This will result in much more relevant responses for your users. Check out our documentation for an example of how we crafted a system message for our site.
 
 
 | Prop | Required | Type | Default | Description |
 | ---- | -------- | ---- | ------- | ----------- |
 | apiKey | Yes | string | "" | Superpowered AI API key |
 | apiSecret | Yes | string | "" | Superpowered AI API secret |
-| headerLogo | No | React.node | Superpowered AI circular logo | The logo (if any) you want displayed next to the title. This gets sized to 25px by 25px. We highly recommend using a suqare or circular logo. |
+| headerLogo | No | React.node | null | The logo (if any) you want displayed next to the title. This gets sized to 25px by 25px. We highly recommend using a suqare or circular logo. |
 | headerTitle | No | string | "" | The title you want displayed at the top of the chatbot |
 | darkMode | No | boolean | false | Use our dark theme colors |
 | initialMessage | No | string | "Hello, how can I help you?" | The welcome message that shows up when the chatbot is opened |
@@ -56,21 +70,6 @@ For full detail about the chat configuration parameters, check out our documenta
 | chatConfig.targetSegmentLength | No | string | "medium" | This parameter controls the average length of the segments that get created. For more complex tasks it usually works better to use medium to long segments. Only used when RSE is set to Yes. |
 | chatConfig.temperature | No | number | 0.1 | This controls the creativity of responses. Set this close to 0 reduce the risk of hallucinations, and closer to 1 for more creative responses. |
 | chatConfig.useRSE | No | boolean | true | Relevant Segment Extraction (RSE) is an optional (but strongly recommended) post-processing step that takes clusters of relevant chunks and intelligently combines them into longer sections of text that we call segments.​​ These segments provide better context to the LLM than any individual chunk can. |
-
-
-## Security
-**DO NOT** use a `server-side` api key. Please only use a `client-side` key.
-Depending on your application, it could also be recommended to rotate your API key and secret. You can easily delete and create new keys in the Superpowered UI.
-
-
-## Recommendations
-While some of the parameters are not required, we highly recommend that you make use of the following in order to get the most out of your chatbot:
-
-1. Header logo and title
-- Please use your own logo and title in order to customize the chatbot to match your site.
-
-2. System message:
-- We highly recommend creating a detailed system message specific to your use case. This will result in much more relevant responses for your users. Check out our documentation for an example of how we crafted a system message for our site.
 
 
 ## Support
