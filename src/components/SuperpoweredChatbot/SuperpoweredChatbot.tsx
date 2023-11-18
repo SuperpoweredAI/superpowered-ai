@@ -6,11 +6,8 @@ import { IconContext } from 'react-icons';
 
 import { getChatThreadResponse, pollChatResponse, createChatThread } from '../../services/chat';
 import { breakResponseIntoChunks } from '../../logic/chat';
-//import superpoweredLogo from '../../assets/superpowered-logo-blue.png';
-//const superpoweredLogo = require('../../assets/superpowered-logo-blue.png')
 
 import './SuperpoweredChatbot.css';
-console.log(require.resolve('react'));
 
 interface SuperpoweredChatbot {
     apiKey: string;
@@ -94,15 +91,11 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
             systemMessage, useRSE, targetSegmentLength, responseLength
         );
 
-        console.log("resData", resData)
-        console.log("status", status)
-
         //setShowThinkingDots(false)
         if (status === 202) {
 
             let responseStatus = resData["status"];
             const pollURL = resData["status_url"];
-            console.log("pollURL", pollURL)
 
             let pollCount = 0;
             let modelResponseText = "";
@@ -117,7 +110,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                     break;
                 }
                 pollCount += 1;
-                console.log("pollCount", pollCount)
 
                 let newChatMessagesWithAiResponse = [...newMessages];
                 // Update the message if the status is IN_PROGRESS, and there is a model response
@@ -156,7 +148,6 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                         content: resData["response"]["interaction"]["model_response"]["content"]
                     };
                     newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
-                    console.log("Setting the session storage item", newChatMessagesWithAiResponse)
                     sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newChatMessagesWithAiResponse));
                     break;
                 }

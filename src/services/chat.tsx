@@ -38,7 +38,6 @@ export async function createChatThread(
     )
 
     const resData = await response.json();
-    console.log(resData)
     return [resData, response.status];
 
 }
@@ -69,8 +68,6 @@ export async function getChatThreadResponse(
         response_length: responseLength
     }
 
-    console.log("payload", payload)
-
     const response = await fetch(
         `${REACT_APP_SERVICE_BASE_URL}/chat/threads/${threadId}/get_response`,
         {
@@ -84,7 +81,6 @@ export async function getChatThreadResponse(
     )
 
     const resData = await response.json();
-    console.log(resData)
     return [resData, response.status];
 
 }
@@ -104,7 +100,6 @@ export async function pollChatResponse(authToken: string, pollURL: string): Prom
     )
 
     const resData = await response.json();
-    console.log("poll response", resData)
     return [resData, response.status];
 
 }
