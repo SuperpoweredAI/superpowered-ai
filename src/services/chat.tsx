@@ -12,9 +12,9 @@ interface Payload {
 export async function createChatThread(
     authToken: string,
     knowledgeBaseIds: string[] = [],
-    model = "gpt-4",
-    temperature = 0,
-    systemMessage = ""): Promise<[any, number]> {
+    model:string = "gpt-4",
+    temperature:number = 0,
+    systemMessage:string = ""): Promise<[any, number]> {
 
     const payload: Payload = {
         knowledge_base_ids: knowledgeBaseIds,
@@ -100,6 +100,31 @@ export async function pollChatResponse(authToken: string, pollURL: string): Prom
     )
 
     const resData = await response.json();
+    return [resData, response.status];
+
+}
+
+
+export async function getChatThreadInteractions(authToken: string, threadId: string, nextPageToken: string = "") {
+
+    let url = `${REACT_APP_SERVICE_BASE_URL}/chat/threads/${threadId}/interactions?limit=10`;
+    if (nextPageToken !== "") {
+        url += `&next_page_token=${nextPageToken}`;
+    }
+
+    const response = await fetch(
+        url,
+        {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": authToken
+            }
+        }
+    )
+
+    const resData = await response.json();
+    console.log("interactions", resData)
     return [resData, response.status];
 
 }

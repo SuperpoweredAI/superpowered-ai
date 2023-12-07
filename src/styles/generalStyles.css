@@ -1,0 +1,194 @@
+
+.light-font-light {
+    font-family: "Inter";
+    font-weight: 300;
+    font-size: 14px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.regular-font-light {
+    font-family: "Inter";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.medium-font-light {
+    font-family: "Inter";
+    font-weight: 500;
+    font-size: 14px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.semi-bold-font-light {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 14px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.semi-bold-font-larger-light {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 16px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.bold-font-light {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 14px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.bold-font-larger-light {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 16px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.small-header-font-light {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 16px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.header-font-light {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 20px;
+    color: #383838;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+/* dark theme styles */
+.light-font-dark {
+    font-family: "Inter";
+    font-weight: 300;
+    font-size: 14px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.regular-font-dark {
+    font-family: "Inter";
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.medium-font-dark {
+    font-family: "Inter";
+    font-weight: 500;
+    font-size: 14px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.semi-bold-font-dark {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 14px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.semi-bold-font-larger-dark {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 16px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.bold-font-dark {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 14px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.bold-font-larger-dark {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 16px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.small-header-font-dark {
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 16px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.header-font-dark {
+    font-family: "Inter";
+    font-weight: 700;
+    font-size: 20px;
+    color: #E8E8E8;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+:root {
+    --message-blue: #5D24D8;
+    --darker-blue: #3b0ba1;
+    --berry: #DE7EAC;
+    --delete-red: #c22419;
+    --darker-red: #94180f;
+    --success-green: #079D70;
+    --off-white: #FAFAFA;
+    --ios-default-gray: #F2F2F7;
+    --off-black: #383838;
+    --divider-line-gray: #E8E8E8;
+    --light-gray: #AEAEAE;
+    --medium-gray: #8F8F8F;
+    --dark-gray: #4F4F4F;
+
+    --dark-theme-off-black: #242329;
+    --dark-theme-background-color: #303036;
+    --dark-theme-card-background: #242329;
+    --dark-theme-card-background-hover: #3e3e45;
+    --dark-theme-delete-red: #f53514;
+    --dark-theme-clickable-text-blue: #b092f0;
+    --dark-theme-clickable-text-blue-hover: #c0a6f7;
+}

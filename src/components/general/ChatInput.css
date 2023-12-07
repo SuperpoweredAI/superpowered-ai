@@ -11,11 +11,11 @@
     padding-top: 5px;
 }
 
-.chatbot-input-light, .chatbot-input-dark {
+.chatbot-input-light-large, .chatbot-input-dark-large, .chatbot-input-light-small, .chatbot-input-dark-small  {
     /* make the height of input field change when the text takes up the entire width */
-    height: unset;
+    height: auto;
     width: 100%;
-    padding: 14px 20px;
+    padding: 20px;
     box-sizing: border-box;
     font-size: 14px;
     font-family: "Inter";
@@ -25,7 +25,11 @@
     resize: none;
 }
 
-.chatbot-input-dark {
+.chatbot-input-light-small, .chatbot-input-dark-small {
+    padding: 14px 20px;
+}
+
+.chatbot-input-dark-small, .chatbot-input-dark-large {
     background-color: #4F4F4F;
     color: #E8E8E8;
 }
@@ -34,7 +38,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+    align-items: center;
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.2);
@@ -45,7 +49,7 @@
     background-color: #4F4F4F;
 }
 
-.chatbot-input-light:focus, .chatbot-input-dark:focus {
+.chatbot-input-light-small:focus, .chatbot-input-dark-small:focus, .chatbot-input-light-large:focus, .chatbot-input-dark-large:focus {
     outline: none;
 }
 

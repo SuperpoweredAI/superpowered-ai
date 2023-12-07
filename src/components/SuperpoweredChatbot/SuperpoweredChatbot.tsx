@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ChatInput from './ChatInput';
+import ChatInput from '../general/ChatInput';
 
 import { BiChat, BiMinus } from 'react-icons/bi';
 import { IconContext } from 'react-icons';
@@ -277,6 +277,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                         sendMessage={(message) => sendMessage(message)}
                         placeholderText={placeholderText}
                         theme={theme}
+                        size={"small"}
                     />
                     <div style={{ display: "flex", flexDirection: "row", textAlign: "right" }}>
                         <p className={`powered-by-sp-promo-text-grey-${theme}`}>{"Powered by "}</p>

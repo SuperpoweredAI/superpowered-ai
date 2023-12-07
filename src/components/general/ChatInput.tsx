@@ -10,9 +10,10 @@ interface ChatInputProps {
     sendMessageDisabled?: boolean;
     placeholderText?: string;
     theme?: "light" | "dark";
+    size?: "small" | "large";
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled, placeholderText, theme }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled, placeholderText, theme, size }) => {
     // This will be the input field for the user to type in
     // This will also contain a button for the user to send the message
 
@@ -83,7 +84,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled,
         <div className={`chatbot-chat-input-container`}>
             <div className={`chatbot-input-row-${theme}`}>
                 <textarea
-                    className={`chatbot-input-${theme}`}
+                    className={`chatbot-input-${theme}-${size}`}
                     onChange={handleChange}
                     onKeyDown={(event) => handleKeyDown(event)}
                     placeholder={placeholderText == undefined ? "Send a message" : placeholderText}
@@ -110,7 +111,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled,
 ChatInput.defaultProps = {
     sendMessageDisabled: false,
     placeholderText: "",
-    theme: "light"
+    theme: "light",
+    size: "large"
 }
 
 export default ChatInput;
