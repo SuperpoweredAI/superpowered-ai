@@ -66,11 +66,12 @@ export function formatSources(references = [], rankedResults = []) {
         }
         numReferencesPerDocument[displayedTitle] = count;
         displayedTitle = (count > 1 ? displayedTitle + " (" + count + ")" : displayedTitle);
+        
         // Cap the number of characters in the document title
-        //let displayedTitle = documentTitle;
         if (displayedTitle.length > 35) {
             displayedTitle = displayedTitle.slice(0, 15) + "..." + displayedTitle.slice(-17);
         }
+        
         source = rankedResult;
         source["document"]["title"] = rankedResult["document"]["title"];
         source["title"] = displayedTitle;

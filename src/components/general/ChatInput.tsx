@@ -11,9 +11,12 @@ interface ChatInputProps {
     placeholderText?: string;
     theme?: "light" | "dark";
     size?: "small" | "large";
+    customChatInputColor?: string;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled, placeholderText, theme, size }) => {
+const ChatInput: React.FC<ChatInputProps> = ({
+    sendMessage, sendMessageDisabled, placeholderText, theme, size, customChatInputColor
+}) => {
     // This will be the input field for the user to type in
     // This will also contain a button for the user to send the message
 
@@ -82,7 +85,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled,
 
     return (
         <div className={`chatbot-chat-input-container`}>
-            <div className={`chatbot-input-row-${theme}`}>
+            <div className={`chatbot-input-row-${theme}`} style={(customChatInputColor == undefined ? {} : {backgroundColor: customChatInputColor})}>
                 <textarea
                     className={`chatbot-input-${theme}-${size}`}
                     onChange={handleChange}
@@ -91,6 +94,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ sendMessage, sendMessageDisabled,
                     ref={textAreaRef}
                     rows={1}
                     value={message}
+                    style={(customChatInputColor == undefined ? {} : {backgroundColor: customChatInputColor})}
                 />
                 <div className="chatbot-send-icon-container" onClick={() => { sendMessage(message); setMessage("") }}>
                     <IconContext.Provider

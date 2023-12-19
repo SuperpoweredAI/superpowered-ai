@@ -8,10 +8,10 @@
     }
 }
 
-.loading-spinner {
+.superpowered-loading-spinner {
     /* absolute position loading spinner */
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    top: calc(50vh - 25px);
     left: calc(50% - 35px);
     transform: translate(-50%, -50%);
     /* spinner size */
@@ -26,6 +26,7 @@
     z-index: 100;
 }
 
-.spinner-container {
+.superpowered-spinner-container {
     margin: auto;
+    position: relative;
 }

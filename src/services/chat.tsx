@@ -54,7 +54,7 @@ export async function getChatThreadResponse(
     useRSE: boolean = true,
     targetSegmentLength: string = "medium",
     responseLength: string = "short"
-): Promise<[any, number]> {
+): Promise<[any, number, object]> {
 
     const payload = {
         async: true,
@@ -81,7 +81,7 @@ export async function getChatThreadResponse(
     )
 
     const resData = await response.json();
-    return [resData, response.status];
+    return [resData, response.status, payload];
 
 }
 
