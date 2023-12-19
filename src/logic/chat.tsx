@@ -91,7 +91,7 @@ interface Interaction {
     searchResults: string[];
 }
 
-interface ChatThread {
+export interface ChatThread {
     id: string;
     title: string;
     interactions: Interaction[];

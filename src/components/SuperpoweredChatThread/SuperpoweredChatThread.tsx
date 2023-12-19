@@ -8,7 +8,7 @@ import { IconContext } from 'react-icons';
 import ChatInput from '../general/ChatInput';
 import LoadingSpinner from '../general/LoadingSpinner';
 
-import { formatChatThread, breakResponseIntoChunks, formatSources } from '../../logic/chat';
+import { formatChatThread, breakResponseIntoChunks, formatSources, ChatThread } from '../../logic/chat';
 import {
     getChatThreadResponse, pollChatResponse, createChatThread, getChatThreadInteractions
 } from '../../services/chat';
@@ -24,16 +24,17 @@ interface SuperpoweredChatThread {
     chatConfig: ChatConfig;
     initialMessage: string;
     placeholderText: string;
-    customContainerStyle: React.CSSProperties;
-    customUserMessageStyle: React.CSSProperties;
-    customAiMessageStyle: React.CSSProperties;
-    customChatInputColor: string;
+    customContainerStyle?: React.CSSProperties;
+    customUserMessageStyle?: React.CSSProperties;
+    customAiMessageStyle?: React.CSSProperties;
+    customChatInputColor?: string;
     hideScrollbar?: boolean;
-    suggestedMessages: string[];
-    introHeader: string;
-    introDescription: string;
+    suggestedMessages?: string[];
+    introHeader?: string;
+    introDescription?: string;
     onMessageSendCallback: Function;
     displaySources: "all" | "link_to_source_only" | "none";
+    defaultMessages?: ChatThread;
 }
 
 export interface SuperpoweredChatThreadHandle {
@@ -74,7 +75,7 @@ interface ChatMessageObject {
 const SuperpoweredChatThread = forwardRef<SuperpoweredChatThreadHandle, SuperpoweredChatThread>(({
     apiKey, apiSecret, darkMode, threadId, chatConfig, initialMessage, placeholderText, customContainerStyle,
     customUserMessageStyle, customAiMessageStyle, customChatInputColor, hideScrollbar, suggestedMessages,
-    introHeader, introDescription, onMessageSendCallback, displaySources
+    introHeader, introDescription, onMessageSendCallback, displaySources, defaultMessages
 }, ref) => {
 
     const loadingSpinnerTop = customContainerStyle["height"] !== undefined ? `calc(${customContainerStyle["height"]} / 2)` : "calc(50vh-25px)";
@@ -336,9 +337,16 @@ const SuperpoweredChatThread = forwardRef<SuperpoweredChatThreadHandle, Superpow
     }, [chatMessages]);
 
 
+    function setChatMessagesFromDefault(messages: ChatThread) {
+        console.log("using default messages", messages)
+        const formattedMessages = formatChatThread(messages);
+        setChatMessages(formattedMessages)
+    }
+
+
     useImperativeHandle(ref, () => ({
         forceNewChatThread() {
-            // Define your reset logic here
+            // Create a new chat thread here
             createNewChatThread();
         },
     }));
@@ -346,13 +354,21 @@ const SuperpoweredChatThread = forwardRef<SuperpoweredChatThreadHandle, Superpow
 
     useEffect(() => {
         setChatThreadId(threadId);
-        if (threadId === null || threadId === "") {
+        console.log("defaultMessages", defaultMessages)
+        if (threadId === null) {
             createNewChatThread()
         } else {
             // When the chat thread changes, request the interactions for this thread
-            requestChatInteractions(threadId);
+            if (defaultMessages === undefined) {
+                requestChatInteractions(threadId);
+            } else {
+                // set the chat messages based off the default messages
+                setChatMessagesFromDefault(defaultMessages)
+            }
+
         }
-    }, [threadId])
+    }, [threadId, defaultMessages])
+
 
     useEffect(() => {
         //console.log(chatContainerRef.current && !disableAutoScroll)
@@ -451,6 +467,7 @@ SuperpoweredChatThread.defaultProps = {
         systemMessage: "",
         responseLength: "medium",
     },
+    customContainerStyle: {},
     suggestedMessages: [],
     introHeader: "",
     introDescription: "",

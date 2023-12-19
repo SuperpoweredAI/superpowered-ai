@@ -336,6 +336,7 @@ SuperpoweredChatbot.defaultProps = {
         userMessageTextStyle: {},
         headerTextStyle: {}
     },
+    onMessageSendCallback: () => null,
     displaySources: "link_to_source_only"
 }
 
