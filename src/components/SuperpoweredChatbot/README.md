@@ -23,6 +23,8 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
         knowledgeBaseIds: [],
         systemMessage: "",
     }}
+    onMessageSendCallback={(payload, response, status) => console.log(payload, response, status)}
+    displaySources={"link_to_source_only"}
 />
 ```
 
@@ -54,6 +56,8 @@ For full detail about the chat configuration parameters, check out our documenta
 | darkMode | No | boolean | false | Use our dark theme colors |
 | initialMessage | No | string | "Hello, how can I help you?" | The welcome message that shows up when the chatbot is opened |
 | placeholderText | No | string | "Type a message" | Placeholder text in the chat input |
+| onMessageSendCallback | No | Function | null | Callback function for detail about the payload sent, the response from the API, and the status. This is primarily for debugging purposes, we do not recommend exposing this to your users |
+| displaySources | No | string | "link_to_source_only" | Options for displaying sources. This can be "all", "link_to_source_only", or "none". "all" will display sources even if they do not contain a "link_to_source", but these will not be clickable. Any source with a "link_to_source" will be clickable, and it will open that source in a new tab |
 | style | No | object | - | Style customization for the chatbot |
 | style.chatContainerMaxHeight | No | string | "90vh" | Max height for the chatbot in the opened state. Beyond this height the message container will scroll vertically. |
 | style.chatContainerWidth | No | string | "575px" | Width for the chatbot in the opened state |
