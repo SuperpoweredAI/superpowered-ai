@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ChatInput from './ChatInput';
+import ChatInput from '../general/ChatInput';
 
 import { BiChat, BiMinus } from 'react-icons/bi';
 import { IconContext } from 'react-icons';
 
 import { getChatThreadResponse, pollChatResponse, createChatThread } from '../../services/chat';
-import { breakResponseIntoChunks } from '../../logic/chat';
+import { breakResponseIntoChunks, formatSources } from '../../logic/chat';
 
 import './SuperpoweredChatbot.css';
 
@@ -13,12 +13,14 @@ interface SuperpoweredChatbot {
     apiKey: string;
     apiSecret: string;
     style: Style;
-    headerLogo: string,
-    headerText: string,
-    darkMode: boolean,
-    placeholderText: string,
-    initialMessage: string,
-    chatConfig: ChatConfig,
+    headerLogo: string;
+    headerText: string;
+    darkMode: boolean;
+    placeholderText: string;
+    initialMessage: string;
+    chatConfig: ChatConfig;
+    onMessageSendCallback: Function;
+    displaySources: "all" | "link_to_source_only" | "none";
 }
 
 interface ChatConfig {
@@ -28,25 +30,29 @@ interface ChatConfig {
     targetSegmentLength: string;
     temperature: number;
     useRSE: boolean;
-    responseLength: string
+    responseLength: string;
 }
 
 interface Style {
-    chatContainerMaxHeight: string;
-    chatContainerWidth: string;
-    chatBubbleStyle: React.CSSProperties;
-    chatBubbleIconStyle: React.CSSProperties;
-    userMessageContainerStyle: React.CSSProperties;
-    userMessageTextStyle: React.CSSProperties;
-    headerTextStyle: React.CSSProperties;
+    chatContainerMaxHeight?: string;
+    chatContainerWidth?: string;
+    chatBubbleStyle?: React.CSSProperties;
+    chatBubbleIconStyle?: React.CSSProperties;
+    userMessageContainerStyle?: React.CSSProperties;
+    userMessageTextStyle?: React.CSSProperties;
+    headerTextStyle?: React.CSSProperties;
 }
 
 interface MessageInterace {
     aiOrUser: string;
     content: string;
+    sources: Array<Source>;
 }
 
-const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret, style, headerLogo, headerText, darkMode, placeholderText, initialMessage, chatConfig }) => {
+const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({
+    apiKey, apiSecret, style, headerLogo, headerText, darkMode, placeholderText, initialMessage,
+    chatConfig, onMessageSendCallback, displaySources
+}) => {
 
     let maxContainerHeight = "90vh"
     if (style.chatContainerMaxHeight !== undefined) {
@@ -86,8 +92,8 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
         // Add the message to the messages list
         let newMessages = [...(messages || []), { aiOrUser: "user", content: message }];
         setMessages(newMessages);
-        const [resData, status] = await getChatThreadResponse(
-            authToken, chatThreadId, message, knowledgeBaseIds, model, temperature, 
+        const [resData, status, payload] = await getChatThreadResponse(
+            authToken, chatThreadId, message, knowledgeBaseIds, model, temperature,
             systemMessage, useRSE, targetSegmentLength, responseLength
         );
 
@@ -143,11 +149,20 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                 }
 
                 if (responseStatus === "COMPLETE") {
+
+                    // Update the sources
+                    const sources = formatSources(
+                        resData["response"]["interaction"]["references"], resData["response"]["interaction"]["ranked_results"]
+                    );
+
                     const newAiResponse = {
                         aiOrUser: "ai",
-                        content: resData["response"]["interaction"]["model_response"]["content"]
+                        content: resData["response"]["interaction"]["model_response"]["content"],
+                        sources: sources
                     };
                     newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
+                    setMessages(newChatMessagesWithAiResponse);
+                    onMessageSendCallback(payload, resData, 200)
                     sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newChatMessagesWithAiResponse));
                     break;
                 }
@@ -160,6 +175,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
         } else {
             //TODO: Handle error
             setShowThinkingDots(false)
+            onMessageSendCallback(payload, resData, status)
         }
     }
 
@@ -249,6 +265,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                                 userMessageTextStyle: style.userMessageTextStyle,
 
                             }}
+                            displaySources={displaySources}
                         />
                         {messages.map((message: MessageInterace, index: number) =>
                             <ChatMessage
@@ -256,11 +273,13 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                                 theme={theme}
                                 aiOrUser={message.aiOrUser}
                                 message={message.content}
+                                sources={message.sources}
                                 customStyle={{
                                     userMessageContainerStyle: style.userMessageContainerStyle,
                                     userMessageTextStyle: style.userMessageTextStyle,
 
                                 }}
+                                displaySources={displaySources}
                             />
                         )}
                         {showThinkingDots &&
@@ -277,6 +296,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({ apiKey, apiSecret,
                         sendMessage={(message) => sendMessage(message)}
                         placeholderText={placeholderText}
                         theme={theme}
+                        size={"small"}
                     />
                     <div style={{ display: "flex", flexDirection: "row", textAlign: "right" }}>
                         <p className={`powered-by-sp-promo-text-grey-${theme}`}>{"Powered by "}</p>
@@ -315,27 +335,68 @@ SuperpoweredChatbot.defaultProps = {
         userMessageContainerStyle: {},
         userMessageTextStyle: {},
         headerTextStyle: {}
-    }
+    },
+    onMessageSendCallback: () => null,
+    displaySources: "link_to_source_only"
 }
 
+interface Document {
+    title: string;
+    link_to_source: string;
+}
+
+interface Source {
+    document: Document;
+}
 
 interface ChatMessageProps {
     message: string;
     aiOrUser: string;
     theme: string;
-    customStyle: any;
+    customStyle: Style;
+    displaySources: string;
+    sources?: Source[];
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, theme, customStyle }) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ message, aiOrUser, theme, customStyle, displaySources, sources=[] }) => {
 
     const customContainerStyle = aiOrUser === "ai" ? {} : customStyle.userMessageContainerStyle;
     const customTextStyle = aiOrUser === "ai" ? {} : customStyle.userMessageTextStyle;
+
+    const showSources = displaySources !== "none";
+
+    // Filter the sources down if needed
+    let formattedSources = [];
+    if (displaySources === "link_to_source_only") {
+        for (let i=0; i<sources.length; i++) {
+            if (sources[i]["document"]["link_to_source"] === "") {
+                continue;
+            } else {
+                formattedSources.push(sources[i])
+            }
+        }
+    } else {
+        formattedSources = sources;
+    }
 
     return (
         <div className={`chatbot-${aiOrUser}-chat-message-container-${theme}`} style={customContainerStyle}>
             <p className={`chatbot-${aiOrUser}-chat-message-${theme}`} style={customTextStyle}>
                 {message}
             </p>
+            {showSources && sources !== undefined && sources.length > 0 &&
+                <div className="chatbot-sources-container">
+                    {formattedSources.map((source, index) =>
+                        <div className={`chatbot-source-container-${theme}${(source["document"]["link_to_source"] === "" ? "" : "-link")}`}
+                            onClick={() => { source["document"]["link_to_source"] === "" ? null : window.open(source["document"]["link_to_source"], "_blank") }}
+                            key={index}>
+                            <p className={`chatbot-source-text-${theme}${(source["document"]["link_to_source"] === "" ? "" : "-link")}`}>
+                                {source["document"]["title"]}
+                            </p>
+                        </div>
+                    )}
+                </div>
+            }
         </div>
     )
 

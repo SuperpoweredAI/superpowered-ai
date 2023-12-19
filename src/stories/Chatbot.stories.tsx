@@ -102,6 +102,67 @@ export const FullProps = {
                 backgroundColor: "white",
             }
         },
+        displaySources: "all"
+    },
+    loaders: [
+        () => {
+            window.sessionStorage.setItem("superpoweredChatbotChatThreadId", "testId");
+            window.sessionStorage.setItem("superpoweredChatbotMessages", JSON.stringify(messages));
+        }
+    ],
+}
+
+
+export const LinkToSourceOnly = {
+    args: {
+        headerText: 'Superpowered',
+        headerLogo: superpoweredLogo,
+        initialMessage: "Hello, how can I help you today?",
+        placeholderText: "Type a message",
+        style: {
+            chatContainerWidth: "550px",
+            chatContainerMaxHeight: "90vh",
+            chatBubbleStyle: {
+                backgroundColor: "#fafafa"
+            },
+            chatBubbleIconStyle: {
+                color: "#383838"
+            },
+            headerContainerStyle: {
+                backgroundColor: "white",
+            }
+        },
+        displaySources: "link_to_source_only"
+    },
+    loaders: [
+        () => {
+            window.sessionStorage.setItem("superpoweredChatbotChatThreadId", "testId");
+            window.sessionStorage.setItem("superpoweredChatbotMessages", JSON.stringify(messages));
+        }
+    ],
+}
+
+
+export const NoSources = {
+    args: {
+        headerText: 'Superpowered',
+        headerLogo: superpoweredLogo,
+        initialMessage: "Hello, how can I help you today?",
+        placeholderText: "Type a message",
+        style: {
+            chatContainerWidth: "550px",
+            chatContainerMaxHeight: "90vh",
+            chatBubbleStyle: {
+                backgroundColor: "#fafafa"
+            },
+            chatBubbleIconStyle: {
+                color: "#383838"
+            },
+            headerContainerStyle: {
+                backgroundColor: "white",
+            }
+        },
+        displaySources: "none"
     },
     loaders: [
         () => {

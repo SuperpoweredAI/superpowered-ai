@@ -1,0 +1,32 @@
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.superpowered-loading-spinner {
+    /* absolute position loading spinner */
+    position: absolute;
+    top: calc(50vh - 25px);
+    left: calc(50% - 35px);
+    transform: translate(-50%, -50%);
+    /* spinner size */
+    width: 70px;
+    height: 70px;
+    border: 10px solid #f3f3f3;
+    /* Light grey */
+    border-top: 10px solid var(--message-blue);
+    /* Black */
+    border-radius: 50%;
+    animation: spinner 1.5s linear infinite;
+    z-index: 100;
+}
+
+.superpowered-spinner-container {
+    margin: auto;
+    position: relative;
+}

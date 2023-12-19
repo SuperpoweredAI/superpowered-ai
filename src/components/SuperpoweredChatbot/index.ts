@@ -1,1 +1,1 @@
-export { default } from "./SuperpoweredChatbot";
+export { default as SuperpoweredChatbot } from "./SuperpoweredChatbot";
