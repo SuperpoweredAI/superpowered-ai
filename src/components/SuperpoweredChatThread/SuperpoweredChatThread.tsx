@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { lucario } from 'react-syntax-highlighter/dist/cjs/styles/prism';
@@ -24,6 +24,20 @@ interface SuperpoweredChatThread {
     chatConfig: ChatConfig;
     initialMessage: string;
     placeholderText: string;
+    customContainerStyle: React.CSSProperties;
+    customUserMessageStyle: React.CSSProperties;
+    customAiMessageStyle: React.CSSProperties;
+    customChatInputColor: string;
+    hideScrollbar?: boolean;
+    suggestedMessages: string[];
+    introHeader: string;
+    introDescription: string;
+    onMessageSendCallback: Function;
+    displaySources: "all" | "link_to_source_only" | "none";
+}
+
+export interface SuperpoweredChatThreadHandle {
+    forceNewChatThread: () => void;
 }
 
 interface ChatConfig {
@@ -39,6 +53,7 @@ interface ChatConfig {
 interface Source {
     document: {
         title: string;
+        link_to_source: string;
     };
     title: string;
 }
@@ -56,9 +71,13 @@ interface ChatMessageObject {
     id: string;
 }
 
-const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
-    apiKey, apiSecret, darkMode, threadId, chatConfig, initialMessage, placeholderText
-}) => {
+const SuperpoweredChatThread = forwardRef<SuperpoweredChatThreadHandle, SuperpoweredChatThread>(({
+    apiKey, apiSecret, darkMode, threadId, chatConfig, initialMessage, placeholderText, customContainerStyle,
+    customUserMessageStyle, customAiMessageStyle, customChatInputColor, hideScrollbar, suggestedMessages,
+    introHeader, introDescription, onMessageSendCallback, displaySources
+}, ref) => {
+
+    const loadingSpinnerTop = customContainerStyle["height"] !== undefined ? `calc(${customContainerStyle["height"]} / 2)` : "calc(50vh-25px)";
 
     const theme = darkMode ? "dark" : "light";
 
@@ -118,13 +137,9 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
             authToken, chatThreadId, nextPageToken
         );
         if (status === 200) {
-            console.log("status", status)
-            console.log("interactions", interactions)
 
             // Format the chat messages
             const newChatMessages = formatChatThread(interactions);
-            console.log("newChatMessages", newChatMessages)
-            console.log("all chat messages", newChatMessages.concat(chatMessages))
 
             // Update the chat messages. The new ones need to be added to the beginning of the array
             setChatMessages(newChatMessages.concat(chatMessages));
@@ -142,11 +157,31 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
     }
 
     async function createNewChatThread() {
+        console.log("creating new chat thread")
         setIsLoading(true);
         const knowledgeBaseIds = chatConfig.knowledgeBaseIds == undefined ? [] : chatConfig.knowledgeBaseIds;
         const [resData, status] = await createChatThread(authToken, knowledgeBaseIds)
         if (status === 200) {
             setChatThreadId(resData.id);
+
+            // Set the chat messages to the current thread's messages
+            let formattedChatMessages = Array;
+
+            if (initialMessage !== undefined && initialMessage !== null && initialMessage !== "") {
+                // Set the initial message
+                const initialMessages = {
+                    prefix: "ai",
+                    content: initialMessage,
+                    sources: [],
+                    searchQueries: [],
+                    searchResults: [],
+                    id: `ai_0000000000`
+                };
+                formattedChatMessages = [initialMessages];
+            }
+
+            // Set the chat messages to the current thread's messages
+            setChatMessages(formattedChatMessages);
         } else {
             //TODO: Handle error
             // This probably means the api key and/or secret aren't valid
@@ -172,29 +207,22 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
         if (chatMessages !== undefined && chatMessages.length > 0) {
             maxID = chatMessages[chatMessages.length - 1]["id"];
         }
-        console.log("maxID", maxID)
-        console.log("maxID+1", maxID + 1)
         const newID = (parseInt(maxID) + 1).toString().padStart(10, "0");
 
         // Update the chat messages in the state variable (only if the status is 200)
         let newMessages = [] as ChatHistory[];
         newMessages = [...(chatMessages || []), { prefix: "user", content: message, sources: [], id: `user_${newID}` }];
 
-        console.log("newMessages", newMessages)
         setChatMessages(newMessages);
-        const [resData, status] = await getChatThreadResponse(
+        const [resData, status, payload] = await getChatThreadResponse(
             authToken, chatThreadId, message, knowledgeBaseIds, model, temperature,
             systemMessage, useRSE, targetSegmentLength, responseLength
         );
-
-        console.log("resData", resData)
-        console.log("status", status)
 
         if (status === 202) {
 
             let responseStatus = resData["status"];
             const pollURL = resData["status_url"];
-            console.log("pollURL", pollURL)
 
             let pollCount = 0;
             let modelResponseText = "";
@@ -209,7 +237,6 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
                     break;
                 }
                 pollCount += 1;
-                console.log("pollCount", pollCount)
 
                 let newChatMessagesWithAiResponse = [...newMessages];
                 // Update the message if the status is IN_PROGRESS, and there is a model response
@@ -232,6 +259,7 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
                                 sources: [], // Don't show the sources yet
                                 searchResults: [],
                                 searchQueries: [],
+                                id: `ai_${resData["response"]["interaction"]["id"]}`
                             };
                             // newChatMessages won't get updated in this loop. It is a constant, not a state variable
                             const newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
@@ -261,7 +289,8 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
                         id: `ai_${resData["response"]["interaction"]["id"]}`
                     };
                     newChatMessagesWithAiResponse = [...newMessages, newAiResponse];
-                    //sessionStorage.setItem('superpoweredChatbotMessages', JSON.stringify(newChatMessagesWithAiResponse));
+                    setChatMessages(newChatMessagesWithAiResponse);
+                    onMessageSendCallback(payload, resData, 200)
                     break;
                 }
                 // Sleep for 0.25 seconds
@@ -273,6 +302,7 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
         } else {
             //TODO: Handle error
             setShowThinkingDots(false)
+            onMessageSendCallback(payload, resData, 400)
         }
     }
 
@@ -306,15 +336,23 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
     }, [chatMessages]);
 
 
+    useImperativeHandle(ref, () => ({
+        forceNewChatThread() {
+            // Define your reset logic here
+            createNewChatThread();
+        },
+    }));
+
+
     useEffect(() => {
-        setChatThreadId(chatThreadId);
-        if (chatThreadId === null || chatThreadId === "") {
+        setChatThreadId(threadId);
+        if (threadId === null || threadId === "") {
             createNewChatThread()
         } else {
             // When the chat thread changes, request the interactions for this thread
-            requestChatInteractions(chatThreadId);
+            requestChatInteractions(threadId);
         }
-    }, [chatThreadId])
+    }, [threadId])
 
     useEffect(() => {
         //console.log(chatContainerRef.current && !disableAutoScroll)
@@ -331,54 +369,71 @@ const SuperpoweredChatThread: React.FC<SuperpoweredChatThread> = ({
 
     return (
 
-        <div className={`chat-main-section-${theme}`}>
-            {isLoading && <LoadingSpinner />}
-            <div className={`chat-main-container`}>
-                <div className="chat-messages-container" ref={chatContainerRef}>
-                    {(nextPageToken !== null && nextPageToken !== "") &&
-                        <div className="view-previous-chats-container">
-                            <p className={`view-previous-chats-text-${theme}`} onClick={() => requestMoreChats()}>
-                                View previous chats
-                            </p>
-                        </div>
-                    }
+        <div className={`superpowered-chat-main-container-${theme}`} style={customContainerStyle}>
+            {isLoading && <LoadingSpinner customStyle={{ top: loadingSpinnerTop }} />}
 
-                    {chatMessages.map((chatMessage, index) =>
-                        <div id={chatMessage["id"]} key={index} ref={messageRefs[chatMessage.id]}>
-                            <ChatBox
-                                theme={theme}
-                                aiOrUserMessage={chatMessage["prefix"]}
-                                message={chatMessage["content"]}
-                                sources={chatMessage["sources"]}
-                                searchQueries={chatMessage["searchQueries"]}
-                                onSourceClick={(source) => console.log(source)}
-                                showQueriesAndResultsModal={(sources, source) => console.log("showQueriesAndResultsModal", sources, source)}
-                            />
-                        </div>
-                    )}
+            {chatMessages.length == 0 && introHeader !== "" &&
+                <div id="superpowered-chat-thread-intro-header">
+                    <p id={`superpowered-chat-thread-intro-header-text-${theme}`}>{introHeader}</p>
+                    <p id={`superpowered-chat-thread-intro-header-description-${theme}`}>{introDescription}</p>
+                </div>
+            }
 
-                    {showThinkingDots && <div className={`chat-message-container-${theme} ai-chat-message-container-${theme}`}>
-                        <div style={{ maxWidth: "850px", margin: "auto", width: "100%" }}>
+            <div className={"superpowered-chat-messages-container" + (hideScrollbar ? " superpowered-chat-messages-container-hide-scrollbar" : "")} ref={chatContainerRef}>
+                {(nextPageToken !== null && nextPageToken !== "") &&
+                    <div className="view-previous-chats-container">
+                        <p className={`view-previous-chats-text-${theme}`} onClick={() => requestMoreChats()}>
+                            View previous chats
+                        </p>
+                    </div>
+                }
+
+                {chatMessages.map((chatMessage, index) =>
+                    <div id={chatMessage["id"]} key={index} ref={messageRefs[chatMessage.id]}>
+                        <ChatBox
+                            theme={theme}
+                            customUserMessageStyle={customUserMessageStyle}
+                            customAiMessageStyle={customAiMessageStyle}
+                            aiOrUserMessage={chatMessage["prefix"]}
+                            message={chatMessage["content"]}
+                            sources={chatMessage["sources"]}
+                            displaySources={displaySources}
+                        />
+                    </div>
+                )}
+
+                {showThinkingDots &&
+                    <div className={`superpowered-chat-message-container-${theme} superpowered-ai-chat-message-container-${theme}`}
+                        style={customAiMessageStyle}>
+                        <div className="superpowered-chat-message-content-container">
                             <ThinkingChatMessage isVisible={showThinkingDots} />
                         </div>
-                    </div>}
-
-                </div>
-
-                <div className={`chat-send-message-container`}>
-                    <ChatInput
-                        sendMessage={(message) => sendMessage(message)}
-                        placeholderText={placeholderText}
-                        theme={theme}
-                        size={"large"}
-                    />
-                </div>
+                    </div>
+                }
 
             </div>
+
+            {chatMessages.length == 0 && suggestedMessages.length > 0 &&
+                <SuggestedMessages
+                    suggestedMessages={suggestedMessages}
+                    onMessageClick={(message: string) => sendMessage(message)}
+                />
+            }
+
+            <div className={`chat-send-message-container`}>
+                <ChatInput
+                    sendMessage={(message) => sendMessage(message)}
+                    placeholderText={placeholderText}
+                    theme={theme}
+                    size={"large"}
+                    customChatInputColor={customChatInputColor}
+                />
+            </div>
+
         </div>
     )
 
-}
+})
 
 
 SuperpoweredChatThread.defaultProps = {
@@ -396,8 +451,33 @@ SuperpoweredChatThread.defaultProps = {
         systemMessage: "",
         responseLength: "medium",
     },
+    suggestedMessages: [],
+    introHeader: "",
+    introDescription: "",
+    hideScrollbar: true,
+    onMessageSendCallback: () => null,
+    displaySources:"link_to_source_only",
 }
 
+
+interface SuggestedMessagesProps {
+    suggestedMessages: string[];
+    onMessageClick: Function;
+}
+
+const SuggestedMessages: React.FC<SuggestedMessagesProps> = ({ suggestedMessages, onMessageClick }) => {
+
+    return (
+        <div className="superpowered-suggested-messages-container">
+            {suggestedMessages.map((message: string, index: number) =>
+                <div className="superpowered-suggested-message" key={index} onClick={() => onMessageClick(message)}>
+                    <p className="regular-font-dark">{message}</p>
+                </div>
+            )}
+        </div>
+    )
+
+}
 
 interface ThinkingChatMessageProps {
     isVisible: boolean;
@@ -431,12 +511,39 @@ export const ThinkingChatMessage: React.FC<ThinkingChatMessageProps> = ({ isVisi
 }
 
 
-const ChatBox = ({ aiOrUserMessage, message, onSourceClick, sources, searchQueries, showQueriesAndResultsModal, theme }) => {
-    // aiOrUserMessage is either "ai" or "user"
+interface ChatBox {
+    aiOrUserMessage: string;
+    message: string;
+    sources: Source[];
+    theme: string;
+    customUserMessageStyle: React.CSSProperties;
+    customAiMessageStyle: React.CSSProperties;
+    displaySources: string
+}
+
+const ChatBox: React.FC<ChatBox> = ({
+    aiOrUserMessage, message, sources, theme, customUserMessageStyle, customAiMessageStyle, displaySources
+}) => {
 
     const [showCopiedText, setShowCopiedText] = useState(false);
     const [showCopiedMessage, setShowCopiedMessage] = useState(false);
     const [copyText, setCopyText] = useState("");
+
+    const showSources = displaySources !== "none";
+
+    // Filter the sources down if needed
+    let formattedSources = [];
+    if (displaySources === "link_to_source_only") {
+        for (let i = 0; i < sources.length; i++) {
+            if (sources[i]["document"]["link_to_source"] === "") {
+                continue;
+            } else {
+                formattedSources.push(sources[i])
+            }
+        }
+    } else {
+        formattedSources = sources;
+    }
 
     function copyMessageText() {
         // Copy the text to clipboard
@@ -449,7 +556,7 @@ const ChatBox = ({ aiOrUserMessage, message, onSourceClick, sources, searchQueri
         }, 3000);
     }
 
-    function getMarkdownText(children) {
+    function getMarkdownText(children: any) {
 
         navigator.clipboard.writeText(children[0]);
         setCopyText(children[0])
@@ -464,9 +571,11 @@ const ChatBox = ({ aiOrUserMessage, message, onSourceClick, sources, searchQueri
 
     return (
 
-        <div className={`chat-message-container-${theme} ${aiOrUserMessage}-chat-message-container-${theme}`}>
-            <div className="chat-message-header-container">
-                <p className="chat-message-header-text">
+        <div
+            className={`superpowered-chat-message-container-${theme} superpowered-${aiOrUserMessage}-chat-message-container-${theme}`}
+            style={(aiOrUserMessage === 'ai' ? customAiMessageStyle : customUserMessageStyle)}>
+            <div className="superpowered-chat-message-header-container">
+                <p className="superpowered-chat-message-header-text">
                     {aiOrUserMessage === "ai" ? "AI" : "USER"}
                 </p>
                 <div onClick={() => copyMessageText()}>
@@ -482,7 +591,7 @@ const ChatBox = ({ aiOrUserMessage, message, onSourceClick, sources, searchQueri
                 </div>
             </div>
 
-            <div className="chat-message-content-container">
+            <div className="superpowered-chat-message-content-container">
 
                 <ReactMarkdown
                     children={message}
@@ -528,20 +637,17 @@ const ChatBox = ({ aiOrUserMessage, message, onSourceClick, sources, searchQueri
                     }}
                 />
 
-                {sources.length > 0 &&
-                    <div className="sources-container">
-                        <div className="sources-col">
-                            <p className={`semi-bold-font-${theme}`} style={{ fontSize: "16px" }}>
-                                Sources
-                            </p>
-                        </div>
-                        <div className="sources-col">
-                            {sources.map((source, index) =>
-                                <div key={index} className="source-row" onClick={() => showQueriesAndResultsModal(sources, source)}>
-                                    <p className={`source-text-${theme}`}>{source["title"]}</p>
-                                </div>
-                            )}
-                        </div>
+                {showSources && sources !== undefined && sources.length > 0 &&
+                    <div className="chatbot-sources-container">
+                        {formattedSources.map((source, index) =>
+                            <div className={`chatbot-source-container-${theme}${(source["document"]["link_to_source"] === "" ? "" : "-link")}`}
+                                onClick={() => { source["document"]["link_to_source"] === "" ? null : window.open(source["document"]["link_to_source"], "_blank") }}
+                                key={index}>
+                                <p className={`chatbot-source-text-${theme}${(source["document"]["link_to_source"] === "" ? "" : "-link")}`}>
+                                    {source["document"]["title"]}
+                                </p>
+                            </div>
+                        )}
                     </div>
                 }
 
