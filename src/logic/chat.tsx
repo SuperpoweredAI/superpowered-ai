@@ -52,7 +52,7 @@ export function formatSources(references = [], rankedResults = []) {
     // references is just an array of indices that correlates to the rankedResults array
 
     let sources: Source[] = [];
-    let numReferencesPerDocument = {};
+    let numReferencesPerDocument: {[key: string]: number} = {};
     let displayedTitle = "";
     let source = {};
 
@@ -66,19 +66,30 @@ export function formatSources(references = [], rankedResults = []) {
         }
         numReferencesPerDocument[displayedTitle] = count;
         displayedTitle = (count > 1 ? displayedTitle + " (" + count + ")" : displayedTitle);
-        
+
         // Cap the number of characters in the document title
         if (displayedTitle.length > 35) {
             displayedTitle = displayedTitle.slice(0, 15) + "..." + displayedTitle.slice(-17);
         }
-        
+
         source = rankedResult;
-        source["document"]["title"] = rankedResult["document"]["title"];
         source["title"] = displayedTitle;
         sources.push(source);
     }
 
-    return sources;
+    // Get the unique sources
+    let uniqueSources: Source[] = [];
+    let uniqueSourceTitles: string[] = [];
+    for (let i = 0; i < sources.length; i++) {
+        if (uniqueSourceTitles.includes(sources[i].document.title)) {
+            continue
+        } else {
+            uniqueSourceTitles.push(sources[i].document.title)
+            uniqueSources.push(sources[i])
+        }
+    }
+
+    return uniqueSources;
 }
 
 
