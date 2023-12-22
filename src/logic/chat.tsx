@@ -95,11 +95,13 @@ export function formatSources(references = [], rankedResults = []) {
 
 interface Interaction {
     id: string;
-    prefix: string;
     content: string;
     sources: Source[];
-    searchQueries: string[];
-    searchResults: string[];
+    search_queries: string[];
+    ranked_results: string[];
+    model_response: object;
+    user_input: object;
+    references: string[];
 }
 
 export interface ChatThread {
@@ -132,7 +134,7 @@ export function formatChatThread(chatThread: ChatThread) {
     let chatHistory = chatThread.interactions;
     console.log("chatHistory", chatHistory)
     // Sort the chat history by id (increasing order)
-    chatHistory.sort((a: string, b: string) => {
+    chatHistory.sort((a: ChatHistory, b: ChatHistory) => {
         return a.id - b.id;
     });
     let formattedChatHistory: ChatHistory[] = [];
