@@ -126,13 +126,13 @@ export function formatChatThreadTitle(chatThread: ChatThread) {
 
 
 export function formatChatThread(chatThread: ChatThread) {
-    console.log("chatThread", chatThread)
+    
     // Format the data into a more usable format for the frontend
     if (chatThread == undefined) {
         return [];
     }
     let chatHistory = chatThread.interactions;
-    console.log("chatHistory", chatHistory)
+    
     // Sort the chat history by id (increasing order)
     chatHistory.sort((a: ChatHistory, b: ChatHistory) => {
         return a.id - b.id;
