@@ -124,7 +124,6 @@ export async function getChatThreadInteractions(authToken: string, threadId: str
     )
 
     const resData = await response.json();
-    console.log("interactions", resData)
     return [resData, response.status];
 
 }

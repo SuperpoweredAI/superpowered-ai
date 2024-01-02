@@ -177,6 +177,8 @@
     margin-top: 0px;
     margin-bottom: 0px;
     color: #5D24D8;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chatbot-source-text-dark, .chatbot-source-text-dark-link {
@@ -200,7 +202,7 @@
     margin-top: 8px;
     margin-bottom: 8px;
     width: fit-content;
-    max-width: 275px;
+    max-width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

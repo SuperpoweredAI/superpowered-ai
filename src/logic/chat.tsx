@@ -52,7 +52,7 @@ export function formatSources(references = [], rankedResults = []) {
     // references is just an array of indices that correlates to the rankedResults array
 
     let sources: Source[] = [];
-    let numReferencesPerDocument = {};
+    let numReferencesPerDocument: {[key: string]: number} = {};
     let displayedTitle = "";
     let source = {};
 
@@ -66,29 +66,42 @@ export function formatSources(references = [], rankedResults = []) {
         }
         numReferencesPerDocument[displayedTitle] = count;
         displayedTitle = (count > 1 ? displayedTitle + " (" + count + ")" : displayedTitle);
-        
+
         // Cap the number of characters in the document title
         if (displayedTitle.length > 35) {
             displayedTitle = displayedTitle.slice(0, 15) + "..." + displayedTitle.slice(-17);
         }
-        
+
         source = rankedResult;
-        source["document"]["title"] = rankedResult["document"]["title"];
         source["title"] = displayedTitle;
         sources.push(source);
     }
 
-    return sources;
+    // Get the unique sources
+    let uniqueSources: Source[] = [];
+    let uniqueSourceTitles: string[] = [];
+    for (let i = 0; i < sources.length; i++) {
+        if (uniqueSourceTitles.includes(sources[i].document.title)) {
+            continue
+        } else {
+            uniqueSourceTitles.push(sources[i].document.title)
+            uniqueSources.push(sources[i])
+        }
+    }
+
+    return uniqueSources;
 }
 
 
 interface Interaction {
     id: string;
-    prefix: string;
     content: string;
     sources: Source[];
-    searchQueries: string[];
-    searchResults: string[];
+    search_queries: string[];
+    ranked_results: string[];
+    model_response: object;
+    user_input: object;
+    references: string[];
 }
 
 export interface ChatThread {
@@ -113,15 +126,15 @@ export function formatChatThreadTitle(chatThread: ChatThread) {
 
 
 export function formatChatThread(chatThread: ChatThread) {
-    console.log("chatThread", chatThread)
+    
     // Format the data into a more usable format for the frontend
     if (chatThread == undefined) {
         return [];
     }
     let chatHistory = chatThread.interactions;
-    console.log("chatHistory", chatHistory)
+    
     // Sort the chat history by id (increasing order)
-    chatHistory.sort((a: string, b: string) => {
+    chatHistory.sort((a: ChatHistory, b: ChatHistory) => {
         return a.id - b.id;
     });
     let formattedChatHistory: ChatHistory[] = [];

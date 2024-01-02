@@ -14,7 +14,7 @@ const testSources = [
     {
         document: {
             link_to_source: "https://www.mendable.ai",
-            title: "financial_modeling_tools_dev.txt",
+            title: "financial_modeling_tools_dev_testing_long_title.txt",
         }
     },
 ]
