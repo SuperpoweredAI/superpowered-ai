@@ -96,13 +96,13 @@
     background-color: #383838;
 }
 
-.minimize-icon-light, .minimize-icon-dark {
+.superpowred-minimize-icon-light, .superpowred-minimize-icon-dark {
     color: 383838;
     font-size: 20px;
     cursor: pointer;
 }
 
-.minimize-icon-dark {
+.superpowred-minimize-icon-dark {
     color: #f7f7f7;
 }
 

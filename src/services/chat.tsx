@@ -47,13 +47,14 @@ export async function getChatThreadResponse(
     authToken: string,
     threadId: string,
     input: string,
-    knowledge_base_ids: string[] = [],
+    knowledgeBaseIds: string[] = [],
     model: string = "gpt-3.5-turbo",
     temperature: number = 0,
-    system_message: string = "",
+    systemMessage: string = "",
     useRSE: boolean = true,
     targetSegmentLength: string = "medium",
-    responseLength: string = "short"
+    responseLength: string = "short",
+    autoQueryGuidance: string="",
 ): Promise<[any, number, object]> {
 
     const payload = {
@@ -63,8 +64,9 @@ export async function getChatThreadResponse(
         temperature: temperature,
         use_rse: useRSE,
         segment_length: targetSegmentLength,
-        system_message: system_message,
-        knowledge_base_ids: knowledge_base_ids,
+        system_message: systemMessage,
+        auto_query_guidance: autoQueryGuidance,
+        knowledge_base_ids: knowledgeBaseIds,
         response_length: responseLength
     }
 

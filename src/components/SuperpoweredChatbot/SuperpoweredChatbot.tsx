@@ -27,6 +27,7 @@ interface ChatConfig {
     model: string;
     knowledgeBaseIds: string[];
     systemMessage: string;
+    autoQueryGuidance: string;
     targetSegmentLength: string;
     temperature: number;
     useRSE: boolean;
@@ -87,6 +88,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({
         const useRSE = chatConfig.useRSE == undefined ? true : chatConfig.useRSE;
         const targetSegmentLength = chatConfig.targetSegmentLength == undefined ? "medium" : chatConfig.targetSegmentLength;
         const responseLength = chatConfig.responseLength == undefined ? "short" : chatConfig.responseLength;
+        const autoQueryGuidance = chatConfig.autoQueryGuidance == undefined ? "" : chatConfig.autoQueryGuidance;
 
         setShowThinkingDots(true)
         // Add the message to the messages list
@@ -94,7 +96,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({
         setMessages(newMessages);
         const [resData, status, payload] = await getChatThreadResponse(
             authToken, chatThreadId, message, knowledgeBaseIds, model, temperature,
-            systemMessage, useRSE, targetSegmentLength, responseLength
+            systemMessage, useRSE, targetSegmentLength, responseLength, autoQueryGuidance
         );
 
         //setShowThinkingDots(false)
@@ -248,7 +250,7 @@ const SuperpoweredChatbot: React.FC<SuperpoweredChatbot> = ({
 
                         <div>
                             <IconContext.Provider
-                                value={{ className: `minimize-icon-${theme}` }}>
+                                value={{ className: `superpowred-minimize-icon-${theme}` }}>
                                 <div onClick={() => toggleVisibility()}>
                                     <BiMinus />
                                 </div>
@@ -325,7 +327,8 @@ SuperpoweredChatbot.defaultProps = {
         temperature: 0.1,
         targetSegmentLength: "medium",
         systemMessage: "",
-        responseLength: "short"
+        responseLength: "short",
+        autoQueryGuidance: "",
     },
     style: {
         chatBubbleStyle: {},
