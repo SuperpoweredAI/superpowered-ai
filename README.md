@@ -20,8 +20,22 @@ import { SuperpoweredChatbot } from 'superpowered-ai'
     initialMessage={"Welcome to Superpowered AI. How can I help you?"}
     placeholderText={"Type a message..."}
     chatConfig={{
+        model: "gpt-4",
         knowledgeBaseIds: [],
         systemMessage: "",
+        autoQueryGuidance: "",
+        targetSegmentLength: "medium",
+        useRSE: true,
+        responseLength: "medium",
+        temperature: 0.2,
+    }}
+    style={{
+        chatContainerMaxHeight: "90vh",
+        chatContainerWidth: "575px",
+        chatBubbleStyle: {backgroundColor: "#5D24D8"},
+        chatBubbleIconStyle: {color: "white"},
+        userMessageContainerStyle: {backgroundColor: "#5D24D8"},
+        userMessageTextStyle: {fontFamily: "Inter", fontSize: "14px"}
     }}
     onMessageSendCallback={(payload, response, status) => console.log(payload, response, status)}
     displaySources={"link_to_source_only"}
@@ -70,6 +84,7 @@ For full detail about the chat configuration parameters, check out our documenta
 | chatConfig.model | No | string | "gpt-4" | Model to use. This can either be "gpt-4" or "gpt-3.5-turbo" |
 | chatConfig.knowledgeBaseIds | Yes | array | [] | List of Superpowered AI knowledge base ids to give the chatbot access to |
 | chatConfig.systemMessage | No | string | "" | The system message lets you instruct the LLM to behave in a certain way. You can also use it to give the LLM context about what its role is. For example, “You are a customer service bot for Superpowered AI. Superpowered AI is a knowledge base as a service provider for LLM applications… You should ONLY discuss Superpowered AI’s products and politely refuse to answer unrelated questions.” Don’t be afraid to make this multiple paragraphs long with a lot of detail and examples. |
+| chatConfig.autoQueryGuidance | No | string | "" | When we automatically generate queries based on user input, you may want to provide some additional guidance and/or context to the system. For example, you may have some information that may not be input directly as query input, but you want the information present when generating search queries in the retrieval step. |
 | chatConfig.targetSegmentLength | No | string | "medium" | This parameter controls the average length of the segments that get created. For more complex tasks it usually works better to use medium to long segments. Only used when RSE is set to Yes. |
 | chatConfig.responseLength | No | string | "short" | Response length controls the average length of chat responses. Short is the default, which will keep responses to a few sentences or less. If you want the model to respond with as much detail as possible, which usually means using multiple paragraphs, use long. |
 | chatConfig.temperature | No | number | 0.1 | This controls the creativity of responses. Set this close to 0 reduce the risk of hallucinations, and closer to 1 for more creative responses. |
